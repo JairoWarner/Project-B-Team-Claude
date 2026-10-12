@@ -7,13 +7,19 @@
     public string Password { get; set; }
 
     public string FullName { get; set; }
+    public string Phone { get; set; }
+    public string Role { get; set; }
+    public string? DateOfBirth { get; set; }
 
-    public AccountModel(Int64 id, string email, string password, string fullname)
+    public AccountModel(Int64 id, string fullname, string email, string password, string phone, string role, string? dateofbirth)
     {
         Id = id;
+        FullName = fullname;
         EmailAddress = email;
         Password = password;
-        FullName = fullname;
+        Phone = phone;
+        Role = role;
+        DateOfBirth = dateofbirth;
     }
 
 
