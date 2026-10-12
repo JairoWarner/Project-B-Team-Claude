@@ -7,4 +7,4 @@ obj/
 
 *.user
 *.suo
-*.log
+*.log.DS_Store
