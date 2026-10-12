@@ -6,8 +6,9 @@ static class Menu
     //You could edit this to show different menus depending on the user's role
     static public void Start()
     {
-        Console.WriteLine("Enter 1 to login");
-        Console.WriteLine("Enter 2 to do something else in the future");
+        Print.Normal("Enter 1 to login");
+        Print.Normal("Enter 2 to create account");
+        Print.Normal("Enter 3 to do something else in the future");
 
         string input = Console.ReadLine();
         if (input == "1")
@@ -16,7 +17,7 @@ static class Menu
         }
         else if (input == "2")
         {
-            Console.WriteLine("This feature is not yet implemented");
+            AccountCreate.Create();
         }
         else
         {
