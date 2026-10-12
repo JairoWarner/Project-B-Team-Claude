@@ -1,11 +1,10 @@
-using System;
-
-class AccountCreate
+ public class AccountCreate
 {   
+    public String FirstName;
+    public String Lastname;
     public AccountModel Account = new();
-    String FirstName;
-    String Lastname;
-    public Create(Accountmodel Account)
+
+    public static void Create()
     {
         Print.Title("LOG-IN PAGE");
 
@@ -27,8 +26,6 @@ class AccountCreate
                 Print.Error("Maximum length of Last name is 16 caracters");
                 Print.Error("username should only contain letters");
             Print.Normal("Please enter your date of birth");
-            
-            if (Dateofbirth) 
             
             break;
         }
