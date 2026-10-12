@@ -1,47 +1,45 @@
 
-public static class Con
+public static class ConsoleStyle
 {
+    private const string Red =          "\u001b[38;2;139;0;0m";
+    private const string Gold =         "\u001b[38;2;255;215;0m";
+    private const string Ivory =        "\u001b[38;2;245;240;230m";
+    private const string Green =        "\u001b[38;2;34;139;34m";
+    private const string Background =   "\u001b[48;2;26;26;26m";
+
+    // Reset
+    private const string Reset =        "\u001b[0m";
+
     public static void Setup()
     {
-        Console.BackgroundColor = ConsoleColor.Black;
-        Console.ForegroundColor = ConsoleColor.Gray;
+        Console.Write(Background);
         Console.Clear();
     }
 
     public static void Title(string text)
     {
-        Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine("==============================");
-        Console.WriteLine($"  {text}");
-        Console.WriteLine("==============================");
-        Console.ResetColor();
-    }
-
-    public static void Success(string text)
-    {
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine(text);
-        Console.ResetColor();
-    }
-
-    public static void Error(string text)
-    {
-        Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine(text);
-        Console.ResetColor();
-    }
-
-    public static void Price(string text)
-    {
-        Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine(text);
-        Console.ResetColor();
+        Console.WriteLine(Gold +"==============================" + Reset);
+        Console.WriteLine(Red + "       " + text + Reset);
+        Console.WriteLine(Gold +"==============================" + Reset);
     }
 
     public static void Normal(string text)
     {
-        Console.ForegroundColor = ConsoleColor.Gray;
-        Console.WriteLine(text);
-        Console.ResetColor();
+        Console.WriteLine(Ivory + text + Reset);
+    }
+
+    public static void Price(string text)
+    {
+        Console.WriteLine(Gold + text + Reset);
+    }
+
+    public static void Success(string text)
+    {
+        Console.WriteLine(Green + text + Reset);
+    }
+
+    public static void Error(string text)
+    {
+        Console.WriteLine(Red + text + Reset);
     }
 }
