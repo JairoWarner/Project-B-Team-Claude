@@ -15,7 +15,7 @@ public static class Print
     public static void Title(string text)
     {
         Console.WriteLine(Goud +"==============================" + Reset);
-        Console.WriteLine(Rood + "       " + text + Reset);
+        Console.WriteLine(Rood + text + Reset);
         Console.WriteLine(Goud +"==============================" + Reset);
     }
     public static void Normal(string text)
