@@ -9,17 +9,20 @@
     public string FullName { get; set; }
     public string Phone { get; set; }
     public string Role { get; set; }
-    public string DateOfBirth { get; set; }
+    public Int64? DateOfBirth { get; set; }
 
-    public AccountModel(Int64 id, string email, string password, string fullname)
+    public AccountModel(Int64 id, string fullname, string email, string password, string phone, string role, Int64? dateofbirth)
     {
         Id = id;
+        FullName = fullname;
         EmailAddress = email;
         Password = password;
-        FullName = fullname;
+        Phone = phone;
+        Role = role;
+        DateOfBirth = dateofbirth;
     }
 
-    public AccountModel(long id, string emailAddress, string password, string fullName, string phone, string role, string dateOfBirth)
+    public AccountModel(Int64 id, string emailAddress, string password, string fullName, string phone, string role, Int64 dateOfBirth)
     {
         Id = id;
         EmailAddress = emailAddress;
