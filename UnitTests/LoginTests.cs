@@ -13,7 +13,7 @@ public sealed class Test1
     {
         // arrange
         AccountsLogic l = new();
-        AccountsAccess access = new();
+        AccountAccess access = new();
 
         // act 
         AccountModel result = l.CheckLogin(m, p);

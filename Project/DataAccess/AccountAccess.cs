@@ -3,11 +3,11 @@ using Microsoft.Data.Sqlite;
 using Dapper;
 
 
-public class AccountsAccess
+public class AccountAccess
 {
     private SqliteConnection _connection = new SqliteConnection($"Data Source=DataSources/project.db");
 
-    private string Table = "Accounts";
+    private string Table = "Account";
 
     public void Write(AccountModel account)
     {

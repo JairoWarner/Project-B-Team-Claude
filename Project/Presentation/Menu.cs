@@ -1,3 +1,5 @@
+using System.Runtime.InteropServices;
+
 public class Menu
 {
     public static void Start()
@@ -35,7 +37,8 @@ public class Menu
                     break;
 
                 case "5":
-                    Console.WriteLine("Not implemented yet!");
+                    FoodMenu foodMenu = new();
+                    Console.WriteLine(foodMenu.Test());
                     break;
 
                 case "6":
