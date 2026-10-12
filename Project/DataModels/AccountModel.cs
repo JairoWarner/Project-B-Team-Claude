@@ -8,10 +8,10 @@
 
     public string FullName { get; set; }
     public string Phone { get; set; }
-    public string Role { get; set; } = "Customer";
-    public string DateOfBirth { get; set; }
+    public string Role { get; set; }
+    public string? DateOfBirth { get; set; }
 
-    public AccountModel(Int64 id, string fullname, string email, string password, string phone, string role, string dateofbirth)
+    public AccountModel(Int64 id, string fullname, string email, string password, string phone, string role, string? dateofbirth)
     {
         Id = id;
         FullName = fullname;
