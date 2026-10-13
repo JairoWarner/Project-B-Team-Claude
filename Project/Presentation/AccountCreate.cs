@@ -1,4 +1,4 @@
-Public class AccountCreate
+public class AccountCreate
 {
 
 }
