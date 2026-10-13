@@ -8,7 +8,7 @@ public class FoodAcces
 
     public List<FoodModel> GetMenu(int id)
     {
-        string sql = $"SELECT F.* FROM Food F JOIN MenuFood M ON F.ID = M.FoodID WHERE M.MenuID = @ID ORDER BY F.ID";
+        string sql = $"SELECT F.* FROM {Table} F JOIN MenuFood M ON F.ID = M.FoodID WHERE M.MenuID = @ID ORDER BY F.ID";
         return _connection.Query<FoodModel>(sql, new { ID = id }).ToList();
     }
 }
