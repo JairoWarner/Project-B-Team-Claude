@@ -1,5 +1,6 @@
-﻿
-
+﻿using System;
+using System.Linq;
+using System.Globalization;
 //This class is not static so later on we can use inheritance and interfaces
 public class AccountsLogic
 {
@@ -28,6 +29,42 @@ public class AccountsLogic
         }
         return null;
     }
+    public static bool ValidateFirstName(string FirstName)
+    {
+        return !string.IsNullOrEmpty(FirstName)
+            && FirstName.Length >= 2
+            && FirstName.Length <= 16
+            && FirstName.All(char.IsLetter);
+    }
+    public static bool ValidateLastName(string LastName)
+    {
+        return !string.IsNullOrEmpty(LastName)
+        && LastName.Length >= 2
+        && LastName.Length <= 16
+        && LastName.All(char.IsLetter);
+    }
+    public static bool ValidateDateofBirth(string DateofBirth)
+    {
+    if (!DateTime.TryParseExact(DateofBirth,
+        "dd/MM/yyyy",CultureInfo.InvariantCulture,
+        DateTimeStyles.None,out DateTime birthdate))
+        {
+            return false;
+        }
+        int age = DateTime.Today.Year - birthdate.Year;
+        
+        if (birthdate > DateTime.Today || age > 130 || age < 16)
+        {
+            return false;
+        }
+    return true;
+    }   
+    // public static bool ValidateEmail()
+    // {
+        
+    // }
+    
+
 }
 
 
