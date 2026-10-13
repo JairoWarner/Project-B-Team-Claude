@@ -1,9 +1,12 @@
 using System;
 using System.Linq;
+using System.Globalization;
 public class AccountCreate
 {   
     public String FirstName = "";
     public String LastName = "";
+    public String DateofBirth;
+    public DateTime Birthdate;
 
     public void Firstname()
     {
@@ -30,7 +33,7 @@ public class AccountCreate
         }
         Print.Logo();
         Print.SuccesHeader();
-        Print.Success("Firstname is correct toegevoegd!");
+        Print.Success($"{FirstName} is correct toegevoegd!");
         Lastname();
     }
 
@@ -57,9 +60,52 @@ public class AccountCreate
         }
         Print.Logo();
         Print.SuccesHeader();
-        Print.Success("Lastname is correct toegevoegd!");
+        Print.Success($"{LastName} is correct toegevoegd!");
+        Dateofbirth();
     }
-//Print.Normal("Please enter your date of birth");
+
+    public void Dateofbirth()
+    {
+        Print.Title("Please enter your Date of Birth as: (dd/mm/yyyy)");
+        while (true)
+        {
+            DateofBirth = Console.ReadLine();       
+
+            if (!DateTime.TryParseExact(DateofBirth, "dd/MM/yyyy", 
+            CultureInfo.InvariantCulture, DateTimeStyles.None, out Birthdate))
+            {
+                ShowDateError();
+                continue;
+            }
+
+            int age = DateTime.Today.Year - Birthdate.Year;
+
+            if (Birthdate > DateTime.Today || age > 130 || age < 16)
+            {
+                ShowDateError();
+                continue;
+            }
+            break;
+        }
+        Print.Logo();
+        Print.SuccesHeader();
+        Print.Success($"{DateofBirth} is correct toegevoegd!");
+    }
+    private void ShowDateError()
+    {
+        Print.Logo();
+        Print.ErrorHeader();
+        Print.Error("Date is Required");
+        Print.Error("Format should be formatted dd/MM/yyyy");
+        Print.Error("Birth date should be valid");
+        Print.Error("Age should be between 16 and 130 years old");
+        Print.Title("Please enter your Date of Birth as: (dd/MM/yyyy)");
+    }
+
+    public void Emailaddress()
+    {
+        
+    }
 //Print.Normal("Please enter your email-adress");
 //Print.Normal("Please enter your Phone Number");
 //Print.Normal("Please enter your password");
