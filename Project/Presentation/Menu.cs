@@ -1,29 +1,54 @@
-static class Menu
+public class Menu
 {
-
-    //This shows the menu. You can call back to this method to show the menu again
-    //after another presentation method is completed.
-    //You could edit this to show different menus depending on the user's role
-    static public void Start()
+    public static void Start()
     {
-        Print.Normal("Enter 1 to login");
-        Print.Normal("Enter 2 to create account");
-        Print.Normal("Enter 3 to do something else in the future");
+        string menuChoice = "";
+        while (menuChoice != "7")
+        {
+            Console.WriteLine();
+            Console.WriteLine("Homepage");
+            Console.WriteLine("1: My Details:");
+            Console.WriteLine("2: Make Reservation:");
+            Console.WriteLine("3: Show Reservations:");
+            Console.WriteLine("4: Restaurant Layout:");
+            Console.WriteLine("5: Food menu");
+            Console.WriteLine("6: About Us");
+            Console.WriteLine("7: Log out");
+            menuChoice = Console.ReadLine();
+            
+            switch (menuChoice)
+            {
+                case "1":
+                    Console.WriteLine("Not implemented yet!");
+                    break;
 
-        string input = Console.ReadLine();
-        if (input == "1")
-        {
-            UserLogin.Start();
-        }
-        else if (input == "2")
-        {
-            AccountCreate.Create();
-        }
-        else
-        {
-            Console.WriteLine("Invalid input");
-            Start();
-        }
+                case "2":
+                    Console.WriteLine("Not implemented yet!");
+                    break;
+                case "3":
+                    Console.WriteLine("Not implemented yet!");
+                    break;
 
+                case "4":
+                    Console.WriteLine("Not implemented yet!");
+                    break;
+
+                case "5":
+                    Console.WriteLine("Not implemented yet!");
+                    break;
+
+                case "6":
+                    Console.WriteLine("Not implemented yet!");
+                    break;
+
+                case "7":
+                    Console.WriteLine("Not implemented yet!");
+                    break;
+
+                default:
+                    Console.WriteLine("Option doesn't exist");
+                    break;
+            }
+        }
     }
 }
