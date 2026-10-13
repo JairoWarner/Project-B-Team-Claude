@@ -1,3 +1,5 @@
+using System.Runtime.ConstrainedExecution;
+
 public class FoodMenu
 {
     public void ChooseMenu()
@@ -6,6 +8,7 @@ public class FoodMenu
         string menuChoice = "";
         while (menuChoice != "4")
         {
+            Console.WriteLine();
             Console.WriteLine("Which menu do you want to look at?");
             Console.WriteLine("1: Adult menu");
             Console.WriteLine("2: Kids menu");
@@ -13,12 +16,12 @@ public class FoodMenu
             Console.WriteLine("4: Go back..");
             menuChoice = Console.ReadLine();
 
-            switch(menuChoice)
+            switch (menuChoice)
             {
                 case "1":
                     ShowMenu(logic.GetMenu(1));
                     break;
-                
+
                 case "2":
                     ShowMenu(logic.GetMenu(2));
                     break;
@@ -39,9 +42,24 @@ public class FoodMenu
 
     public void ShowMenu(List<FoodModel> menuList)
     {
+        string lastCategory = "";
         foreach (var product in menuList)
         {
-            Console.WriteLine($"{product.ID}, {product.FoodName} - €{product.Price:0.00}");
+            if (product.Category != lastCategory)
+            {
+                Console.WriteLine();
+                Console.WriteLine($"-- {product.Category}");
+                lastCategory = product.Category;
+            }
+
+            if (product.IsAlcoholic == 1)
+            {
+                Console.WriteLine($"{product.ID}    {product.FoodName} (Alcoholic), {product.Description} - €{product.Price:0.00}");
+            }
+            else
+            {
+                Console.WriteLine($"{product.ID}    {product.FoodName}, {product.Description} - €{product.Price:0.00}");
+            }
         }
     }
 }
