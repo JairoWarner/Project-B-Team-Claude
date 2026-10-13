@@ -1,12 +1,8 @@
 public class FoodLogic
 {
-    public bool CheckAvailableById(int id)
+    public List<FoodModel> GetMenu(int id)
     {
-        FoodAcces Acces = new();
-        if (Acces.GetById(id) != null)
-        {
-            return true;
-        }
-        return false;
+        FoodAcces acces = new();
+        return acces.GetMenu(id);
     }
 }

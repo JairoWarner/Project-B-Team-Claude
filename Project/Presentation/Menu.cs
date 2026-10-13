@@ -37,8 +37,8 @@ public class Menu
                     break;
 
                 case "5":
-                    FoodMenu foodMenu = new();
-                    Console.WriteLine(foodMenu.Test());
+                    FoodMenu menu = new();
+                    menu.ChooseMenu();
                     break;
 
                 case "6":
@@ -50,7 +50,7 @@ public class Menu
                     break;
 
                 default:
-                    Console.WriteLine("Option doesn't exist");
+                    Console.WriteLine("That option isn't available");
                     break;
             }
         }
