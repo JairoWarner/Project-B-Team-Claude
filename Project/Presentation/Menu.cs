@@ -7,21 +7,20 @@ public class Menu
         string menuChoice = "";
         while (menuChoice != "7")
         {
-            Console.WriteLine();
-            Console.WriteLine("Homepage");
-            Console.WriteLine("1: My Details:");
-            Console.WriteLine("2: Make Reservation:");
-            Console.WriteLine("3: Show Reservations:");
-            Console.WriteLine("4: Restaurant Layout:");
-            Console.WriteLine("5: Food menu");
-            Console.WriteLine("6: About Us");
-            Console.WriteLine("7: Log out");
+            Print.Setup();
+            Print.Title("Homepage");
+            Print.Normal("1: My Details:");
+            Print.Normal("2: Make Reservation:");
+            Print.Normal("3: Show Reservations:");
+            Print.Normal("4: Restaurant Layout:");
+            Print.Normal("5: Food menu");
+            Print.Normal("6: About Us");
+            Print.Normal("7: Log out");
             menuChoice = Console.ReadLine();
             
             switch (menuChoice)
             {
                 case "1":
-                    Console.WriteLine("Not implemented yet!");
                     break;
 
                 case "2":
@@ -30,11 +29,9 @@ public class Menu
                     break;
 
                 case "3":
-                    Console.WriteLine("Not implemented yet!");
                     break;
 
                 case "4":
-                    Console.WriteLine("Not implemented yet!");
                     break;
 
                 case "5":
@@ -43,15 +40,15 @@ public class Menu
                     break;
 
                 case "6":
-                    Console.WriteLine("Not implemented yet!");
                     break;
 
                 case "7":
-                    Console.WriteLine("Not implemented yet!");
                     break;
 
                 default:
-                    Console.WriteLine("That option isn't available");
+                    Print.Error("That option isn't available");
+                    Print.Normal("Press any key to continue..");
+                    Console.ReadKey();
                     break;
             }
         }
