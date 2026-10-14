@@ -9,7 +9,7 @@ public class AccountsLogic
     //This can be used to get the current logged in account from anywhere in the program
     //private set, so this can only be set by the class itself
     public static AccountModel? CurrentAccount { get; private set; }
-    private AccountAccess _access = new();
+    private static AccountAccess _access = new();
 
     public AccountsLogic()
     {
@@ -59,14 +59,39 @@ public class AccountsLogic
         }
     return true;
     }   
-    // public static bool ValidateEmail()
-    // {
-        
-    // }
-    
+    public static bool ValidateEmail(string email)
+    {
+        return !string.IsNullOrWhiteSpace(email)
+            && !email.Contains(' ') && email.Contains('@')
+            && email.Contains('.') && email.IndexOf('@') >= 3;
+    }
+    public static bool EmailExists(string email)
+    {
+        return _access.GetByEmail(email) != null;
+    }
 
+    public static bool ValidatePhoneNumber(string Phonenumber)
+    {
+        return !string.IsNullOrWhiteSpace(Phonenumber)
+            && Phonenumber.All(c => char.IsDigit(c) || c == '+' || c == '-' || c == ' ')
+            && Phonenumber.Count(char.IsDigit) >= 8
+            && Phonenumber.Count(char.IsDigit) <= 15;
+    }
+    public static bool ValidatePassword(string password)
+    {
+        return !string.IsNullOrEmpty(password)
+            && password.Length >= 8 && password.Length <= 16
+            && password.Any(c => !char.IsLetterOrDigit(c) && !char.IsWhiteSpace(c))
+            && password.Any(char.IsUpper);
+    }
+
+
+    public static void CreateAccount(string firstName, string lastName, string email,
+                                    string password, string phonenumber, string DateofBirth)
+    {
+        var account = new AccountModel(0 ,$"{firstName} {lastName}",
+            email,password,phonenumber,"Customer",DateofBirth);
+        _access.Write(account);
+    }
 }
-
-
-
 
