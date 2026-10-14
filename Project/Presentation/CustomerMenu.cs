@@ -1,11 +1,9 @@
-using Project.Presentation;
+using System.Runtime.InteropServices;
 
-public class CustomerMenu
+public class Menu
 {
     public static void Start()
     {
-        AccountInfo accountInfo = new AccountInfo();
-        
         string menuChoice = "";
         while (menuChoice != "7")
         {
@@ -27,7 +25,8 @@ public class CustomerMenu
                     break;
 
                 case "2":
-                    Console.WriteLine("Not implemented yet!");
+                    AddReservation addReservation = new();
+                    addReservation.start();
                     break;
 
                 case "3":
@@ -39,7 +38,8 @@ public class CustomerMenu
                     break;
 
                 case "5":
-                    Console.WriteLine("Not implemented yet!");
+                    FoodMenu menu = new();
+                    menu.ChooseMenu();
                     break;
 
                 case "6":
@@ -51,7 +51,7 @@ public class CustomerMenu
                     break;
 
                 default:
-                    Console.WriteLine("Option doesn't exist");
+                    Console.WriteLine("That option isn't available");
                     break;
             }
         }
