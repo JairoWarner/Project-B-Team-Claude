@@ -25,7 +25,8 @@ public class Menu
                     break;
 
                 case "2":
-                    Console.WriteLine("Not implemented yet!");
+                    AddReservation addReservation = new();
+                    addReservation.start();
                     break;
 
                 case "3":
