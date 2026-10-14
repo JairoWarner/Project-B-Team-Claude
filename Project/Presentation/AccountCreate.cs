@@ -1,17 +1,32 @@
 using System;
 using System.Linq;
 using System.Globalization;
-public class AccountCreate
+public static class AccountCreate
 {   
-    public String FirstName = "";
-    public String LastName = "";
-    public String DateofBirth;
-    public DateTime Birthdate;
-    public String email = "";
-    public String Phonenumber = "";
-    public String password = "";
+    public static String FirstName = "";
+    public static String LastName = "";
+    public static String DateofBirth;
+    public static DateTime Birthdate;
+    public static String email = "";
+    public static String Phonenumber = "";
+    public static String password = "";
 //====================================================================
-    public void Firstname()
+    public static void Start()
+    {
+        Console.Clear();
+        
+        Style.Title("1: Login");
+        Style.Title("2: Register");
+        string choice = Console.ReadLine();
+        
+        if (choice == "1")
+            UserLogin.LoginStart();
+        
+        Firstname();
+    }
+    
+//====================================================================
+    public static void Firstname()
     {
         Style.Logo();
         Style.Title("Please enter your First Name");
@@ -31,7 +46,7 @@ public class AccountCreate
         Lastname();
     }
 //===================================================================
-    public void Lastname()
+    public static void Lastname()
     {
         Style.Title("Please enter your lastname"); 
         while (true)
@@ -50,7 +65,7 @@ public class AccountCreate
         Dateofbirth();
     }
 //================================================================
-    public void Dateofbirth()
+    public static void Dateofbirth()
     {
         Style.Title("Please enter your Date of Birth as: (dd/MM/yyyy)");
         while (true)
@@ -70,13 +85,13 @@ public class AccountCreate
         Emailaddress();
 }
 //===================================================================
-    public void Emailaddress()
+    public static void Emailaddress()
     {
         Style.Title("Please enter your email Adrres");
         while (true)
         {
             email = Console.ReadLine() ?? "";
-            if (!AccountsLogic.ValidateEmail(email))
+            if (!AccountsLogic.CheckEmail(email))
             {
                 ShowEmailError();
                 continue;
@@ -95,7 +110,7 @@ public class AccountCreate
         PhoneNumber();
     }
 //===================================================================
-    public void PhoneNumber()
+    public static void PhoneNumber()
     {
         Style.Title("Please enter your phone number");
         while (true)
@@ -114,7 +129,7 @@ public class AccountCreate
         Password();
     }
 //===================================================================
-    public void Password()
+    public static void Password()
     {
         Style.Title("Please enter your password");
         while (true)
@@ -131,9 +146,10 @@ public class AccountCreate
         Style.SuccesHeader();
         Style.Success("Password is correct toegevoegd!");
         AccountsLogic.CreateAccount(FirstName, LastName, email, password, Phonenumber, DateofBirth);
+        UserLogin.LoginStart();
     }
 //===================================================================
-    private void ShowFirstNameError()
+    private static void ShowFirstNameError()
     {
         Style.Logo();
         Style.ErrorHeader();
@@ -143,7 +159,7 @@ public class AccountCreate
         Style.Error("username should only contain letters");
         Style.Title("Please enter your First Name");
     }
-    private void ShowLastNameError()
+    private static void ShowLastNameError()
     {
         Style.Logo();
         Style.ErrorHeader();
@@ -153,7 +169,7 @@ public class AccountCreate
         Style.Error("username should only contain letters");   
         Style.Title("Please enter your Last Name");                 
     }
-    private void ShowDateError()
+    private static void ShowDateError()
     {
         Style.Logo();
         Style.ErrorHeader();
@@ -163,7 +179,7 @@ public class AccountCreate
         Style.Error("Age should be between 16 and 130 years old");
         Style.Title("Please enter your Date of Birth as: (dd/MM/yyyy)");
     }
-    private void ShowEmailError()
+    private static void ShowEmailError()
     {
         Style.Logo();
         Style.ErrorHeader();
@@ -174,7 +190,7 @@ public class AccountCreate
         Style.Title("Please enter your email address");
 
     }
-    private void ShowPhoneNumberError()
+    private static void ShowPhoneNumberError()
     {
         Style.Logo();
         Style.ErrorHeader();
@@ -183,7 +199,7 @@ public class AccountCreate
         Style.Error("Phone number Must contain 8 to 15 digits");
         Style.Title("Please enter your phone number");
     }
-    private void ShowPasswordError()
+    private static void ShowPasswordError()
     {
         Style.Logo();
         Style.ErrorHeader();

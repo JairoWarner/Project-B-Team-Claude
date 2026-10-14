@@ -4,6 +4,7 @@ public class CustomerMenu
 {
     public static void Start()
     {
+        Style.Title("Welcome/欢迎");
         string menuChoice = "";
         while (menuChoice != "7")
         {
@@ -46,7 +47,9 @@ public class CustomerMenu
                     break;
 
                 case "7":
-                    Console.WriteLine("Not implemented yet!");
+                    Console.Clear();
+                    Console.WriteLine("You have been logged out");
+                    UserLogin.LoginStart();
                     break;
 
                 default:

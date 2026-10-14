@@ -21,17 +21,6 @@
         Role = role;
         DateOfBirth = dateofbirth;
     }
-
-    public AccountModel(Int64 id, string emailAddress, string password, string fullName, string phone, string role, Int64 dateOfBirth)
-    {
-        Id = id;
-        EmailAddress = emailAddress;
-        Password = password;
-        FullName = fullName;
-        Phone = phone;
-        Role = role;
-        DateOfBirth = dateOfBirth;
-    }
 }
 
 

@@ -7,42 +7,44 @@ public class FoodMenu
         MenuLogic menuLogic = new();
         int countMenu = menuLogic.GetMenu().Count;
         List<MenuModel> menus = menuLogic.GetMenu();
-        FoodLogic foodLogic = new();
-        int menuChoice = 0;
-        while (menuChoice != countMenu + 1)
+        FoodLogic logic = new();
+        string menuChoice = "";
+        while (menuChoice != "4")
         {
             Style.Setup();
             Style.Title("Which menu do you want to see?");
-            for (int i = 1; i < countMenu + 1; i++)
-            {
-                Style.Normal($"{i}: {menus[i - 1].Name}");
-            }
-            Style.Normal($"{countMenu + 1}: Go back..");
-            if (int.TryParse(Console.ReadLine(), out menuChoice))
-            {
+            Style.Normal("1: Adult menu");
+            Style.Normal("2: Kids menu");
+            Style.Normal("3: Drinks menu");
+            Style.Normal("4: Go back..");
+            menuChoice = Console.ReadLine();
 
-
-                if (menuChoice > countMenu + 1)
-                {
-                    Style.Error("That option doesn't exist");
+            switch (menuChoice)
+            {
+                case "1":
+                    ShowMenu(logic.GetMenu(1));
                     Style.Normal("Press any key to continue..");
                     Console.ReadKey();
-                    continue;
-                }
+                    break;
 
-                ShowMenu(foodLogic.GetMenu(menuChoice));
-
-                if (menuChoice != countMenu + 1)
-                {
+                case "2":
+                    ShowMenu(logic.GetMenu(2));
                     Style.Normal("Press any key to continue..");
                     Console.ReadKey();
-                }
-            }
-            else
-            {
-                Style.Error("Not a number!");
-                Style.Normal("Press any key to continue..");
-                Console.ReadKey();
+                    break;
+
+                case "3":
+                    ShowMenu(logic.GetMenu(3));
+                    Style.Normal("Press any key to continue..");
+                    Console.ReadKey();
+                    break;
+
+                case "4":
+                    break;
+
+                default:
+                    Console.WriteLine("That option isn't available");
+                    break;
             }
         }
     }

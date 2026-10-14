@@ -10,11 +10,11 @@ public class AccountsLogic
     public static AccountModel? CurrentAccount { get; private set; }
     private static AccountAccess _access = new();
 
-    public bool CheckEmail(string email)
+    public static bool CheckEmail(string email)
     {
         if (string.IsNullOrEmpty(email))
         {
-            Style.Error("Please fill in your email");
+            Style.Error("Email is required");
             return false;
         }
         
@@ -38,11 +38,11 @@ public class AccountsLogic
         return true;
     }
 
-    public bool CheckPassword(string password)
+    public static bool CheckPassword(string password)
     {
         if (string.IsNullOrEmpty(password))
         {
-            Style.Error("Please fill in your password");
+            Style.Error("Password is required");
             return false;
         }
         
@@ -55,12 +55,26 @@ public class AccountsLogic
         return true;
     }
 
-    public void CheckLogin(string email, string password)
+    public static AccountModel? CheckLogin(string email, string password)
     {
+        AccountModel acc = _access.GetByEmail(email);
         
+        if (acc == null)
+        {
+            Style.Error("Email is invalid");
+            return null;
+        }
+        
+        if (acc.Password != password)
+        {
+            Style.Error("Password is invalid");
+            return null;
+        }
+
+        return acc;
     }
     
-    public string PasswordTransform()
+    public static string PasswordTransform()
     {
         var password = new StringBuilder();
 

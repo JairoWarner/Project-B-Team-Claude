@@ -5,7 +5,23 @@ using Dapper;
 
 public class AccountAccess
 {
-    private SqliteConnection _connection = new SqliteConnection($"Data Source=DataSources/project.db");
+    private readonly SqliteConnection _connection;
+
+    public AccountAccess()
+    {
+        string dbPath = Path.GetFullPath(
+            Path.Combine(
+                AppContext.BaseDirectory,
+                "..",
+                "..",
+                "..",
+                "DataSources",
+                "project.db"
+            )
+        );
+
+        _connection = new SqliteConnection($"Data Source={dbPath}");
+    }
 
     private string Table = "Account";
 
@@ -32,7 +48,4 @@ public class AccountAccess
         string sql = $"DELETE FROM {Table} WHERE id = @Id";
         _connection.Execute(sql, new { Id = account.Id });
     }
-
-
-
 }
