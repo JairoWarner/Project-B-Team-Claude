@@ -8,26 +8,32 @@ public class FoodMenu
         string menuChoice = "";
         while (menuChoice != "4")
         {
-            Console.WriteLine();
-            Console.WriteLine("Which menu do you want to look at?");
-            Console.WriteLine("1: Adult menu");
-            Console.WriteLine("2: Kids menu");
-            Console.WriteLine("3: Drinks menu");
-            Console.WriteLine("4: Go back..");
+            Print.Setup();
+            Print.Title("Which menu do you want to see?");
+            Print.Normal("1: Adult menu");
+            Print.Normal("2: Kids menu");
+            Print.Normal("3: Drinks menu");
+            Print.Normal("4: Go back..");
             menuChoice = Console.ReadLine();
 
             switch (menuChoice)
             {
                 case "1":
                     ShowMenu(logic.GetMenu(1));
+                    Print.Normal("Press any key to continue..");
+                    Console.ReadKey();
                     break;
 
                 case "2":
                     ShowMenu(logic.GetMenu(2));
+                    Print.Normal("Press any key to continue..");
+                    Console.ReadKey();
                     break;
 
                 case "3":
                     ShowMenu(logic.GetMenu(3));
+                    Print.Normal("Press any key to continue..");
+                    Console.ReadKey();
                     break;
 
                 case "4":
@@ -43,22 +49,22 @@ public class FoodMenu
     public void ShowMenu(List<FoodModel> menuList)
     {
         string lastCategory = "";
+        Print.Setup();
         foreach (var product in menuList)
         {
             if (product.Category != lastCategory)
             {
-                Console.WriteLine();
-                Console.WriteLine($"-- {product.Category}");
+                Print.Title($"-- {product.Category}");
                 lastCategory = product.Category;
             }
 
             if (product.IsAlcoholic == 1)
             {
-                Console.WriteLine($"{product.ID}    {product.FoodName} (Alcoholic), {product.Description} - €{product.Price:0.00}");
+                Print.Normal($"{product.ID}    {product.FoodName} {Print.Rood}(Alcoholic){Print.Reset}, {product.Description} - {Print.Goud}€{product.Price:0.00}{Print.Reset}");
             }
             else
             {
-                Console.WriteLine($"{product.ID}    {product.FoodName}, {product.Description} - €{product.Price:0.00}");
+                Print.Normal($"{product.ID}    {product.FoodName}, {product.Description} - {Print.Goud}€{product.Price:0.00}{Print.Reset}");
             }
         }
     }
