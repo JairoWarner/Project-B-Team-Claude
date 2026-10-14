@@ -50,6 +50,11 @@ public class AccountsLogic
         
         return true;
     }
+
+    public void CheckLogin(string email, string password)
+    {
+        
+    }
     
     public string PasswordTransform()
     {

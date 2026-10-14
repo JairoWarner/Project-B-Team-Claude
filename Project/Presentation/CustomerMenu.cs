@@ -1,21 +1,21 @@
 using System.Runtime.InteropServices;
 
-public class Menu
+public class CustomerMenu
 {
     public static void Start()
     {
         string menuChoice = "";
         while (menuChoice != "7")
         {
-            Print.Setup();
-            Print.Title("Homepage");
-            Print.Normal("1: My Details:");
-            Print.Normal("2: Make Reservation:");
-            Print.Normal("3: Show Reservations:");
-            Print.Normal("4: Restaurant Layout:");
-            Print.Normal("5: Food menu");
-            Print.Normal("6: About Us");
-            Print.Normal("7: Log out");
+            Style.Setup();
+            Style.Title("Homepage");
+            Style.Normal("1: My Details:");
+            Style.Normal("2: Make Reservation:");
+            Style.Normal("3: Show Reservations:");
+            Style.Normal("4: Restaurant Layout:");
+            Style.Normal("5: Food menu");
+            Style.Normal("6: About Us");
+            Style.Normal("7: Log out");
             menuChoice = Console.ReadLine();
             
             switch (menuChoice)
@@ -50,8 +50,8 @@ public class Menu
                     break;
 
                 default:
-                    Print.Error("That option isn't available");
-                    Print.Normal("Press any key to continue..");
+                    Style.Error("That option isn't available");
+                    Style.Normal("Press any key to continue..");
                     Console.ReadKey();
                     break;
             }
