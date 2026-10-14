@@ -1,10 +1,8 @@
-using System.Dynamic;
-
-public static class Print
+public static class Style
 {
-    public const string Rood =             "\u001b[38;2;139;0;0m";
+    private const string Rood =             "\u001b[38;2;139;0;0m";
     private const string ErrorRood =         "\u001b[38;2;255;85;85m";   
-    public const string Goud  =             "\u001b[38;2;255;215;0m";
+    private const string Goud =             "\u001b[38;2;255;215;0m";
     private const string Wit =              "\u001b[38;2;245;240;230m";
     private const string Groen =            "\u001b[38;2;34;139;34m";
     private const string SuccessGroen =     "\u001b[38;2;105;230;160m";
@@ -13,7 +11,7 @@ public static class Print
     private const string SuccessAchtergrond = "\u001b[48;2;16;61;39m";
     private const string LogoAchtergrond = "\u001b[48;2;100;0;0m";
     private const string Bold =             "\u001b[1m";
-    public const string Reset =            "\u001b[0m";
+    private const string Reset =            "\u001b[0m";
 
     public static void Setup()
     {

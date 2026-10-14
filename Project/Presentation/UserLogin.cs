@@ -5,23 +5,23 @@ static class UserLogin
 
     public static void Start()
     {
-        Print.Title("Welcome to the login page");
-        Print.Normal("Please enter your email address");
+        Style.Title("Welcome to the login page");
+        Style.Normal("Please enter your email address");
         string email = Console.ReadLine();
-        Print.Normal("Please enter your password");
+        Style.Normal("Please enter your password");
         string password = Console.ReadLine();
         AccountModel acc = accountsLogic.CheckLogin(email, password);
         if (acc != null)
         {
-            Print.Success("Welcome back " + acc.FullName);
-            Print.Normal("Your email number is " + acc.EmailAddress);
+            Style.Success("Welcome back " + acc.FullName);
+            Style.Normal("Your email number is " + acc.EmailAddress);
 
             //Write some code to go back to the menu
             //Menu.Start();
         }
         else
         {
-            Print.Error("No account found with that email and password");
+            Style.Error("No account found with that email and password");
         }
     }
 }
