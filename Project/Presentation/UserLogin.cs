@@ -1,7 +1,5 @@
 static class UserLogin
 {
-    static private AccountsLogic accountsLogic = new AccountsLogic();
-    
     public static void LoginStart()
     {
         while (true)
@@ -10,23 +8,34 @@ static class UserLogin
             
             Style.Normal("Please enter your email address:");
             string email = Console.ReadLine();
-            
-            accountsLogic.CheckEmail(email);
+
+            if (!AccountsLogic.CheckEmail(email))
+            {
+                continue;
+            }
             
             Style.Normal("Please enter your password:");
-            string password = accountsLogic.PasswordTransform();
-            accountsLogic.CheckPassword(password);
+            string password = AccountsLogic.PasswordTransform();
             
-            AccountModel acc = accountsLogic.CheckLogin(email, password);
+            if (!AccountsLogic.CheckPassword(password))
+            {
+                continue;
+            }
+            
+            AccountModel acc = AccountsLogic.CheckLogin(email, password);
             if (acc != null)
             {
                 Style.Success("Welcome back " + acc.FullName);
                 Style.Normal("Your email number is " + acc.EmailAddress);
+                break;
             }
-            else
+
+            if (acc == null)
             {
-                Style.Error("No account found with that email and password");
+                Style.Error("No account found");
             }
         }
+        
+        CustomerMenu.Start();
     }
 }
