@@ -4,44 +4,45 @@ public class FoodMenu
 {
     public void ChooseMenu()
     {
-        FoodLogic logic = new();
-        string menuChoice = "";
-        while (menuChoice != "4")
+        MenuLogic menuLogic = new();
+        int countMenu = menuLogic.GetMenu().Count;
+        List<MenuModel> menus = menuLogic.GetMenu();
+        FoodLogic foodLogic = new();
+        int menuChoice = 0;
+        while (menuChoice != countMenu + 1)
         {
             Print.Setup();
             Print.Title("Which menu do you want to see?");
-            Print.Normal("1: Adult menu");
-            Print.Normal("2: Kids menu");
-            Print.Normal("3: Drinks menu");
-            Print.Normal("4: Go back..");
-            menuChoice = Console.ReadLine();
-
-            switch (menuChoice)
+            for (int i = 1; i < countMenu + 1; i++)
             {
-                case "1":
-                    ShowMenu(logic.GetMenu(1));
+                Print.Normal($"{i}: {menus[i - 1].Name}");
+            }
+            Print.Normal($"{countMenu + 1}: Go back..");
+            if (int.TryParse(Console.ReadLine(), out menuChoice))
+            {
+
+
+                if (menuChoice > countMenu + 1)
+                {
+                    Print.Error("That option doesn't exist");
                     Print.Normal("Press any key to continue..");
                     Console.ReadKey();
-                    break;
+                    continue;
+                }
 
-                case "2":
-                    ShowMenu(logic.GetMenu(2));
+                ShowMenu(foodLogic.GetMenu(menuChoice));
+                
+                if (menuChoice != countMenu + 1)
+                {
                     Print.Normal("Press any key to continue..");
                     Console.ReadKey();
-                    break;
-
-                case "3":
-                    ShowMenu(logic.GetMenu(3));
-                    Print.Normal("Press any key to continue..");
-                    Console.ReadKey();
-                    break;
-
-                case "4":
-                    break;
-
-                default:
-                    Console.WriteLine("That option isn't available");
-                    break;
+                }
+            }
+            else
+            {
+                Print.Error("Not a number!");
+                Print.Normal("Press any key to continue..");
+                Console.ReadKey();
             }
         }
     }
