@@ -9,9 +9,9 @@
     public string FullName { get; set; }
     public string Phone { get; set; }
     public string Role { get; set; }
-    public Int64? DateOfBirth { get; set; }
+    public string DateOfBirth { get; set; }
 
-    public AccountModel(Int64 id, string fullname, string email, string password, string phone, string role, Int64? dateofbirth)
+    public AccountModel(Int64 id, string fullname, string email, string password, string phone, string role, string dateofbirth)
     {
         Id = id;
         FullName = fullname;
