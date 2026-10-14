@@ -2,6 +2,21 @@
 
 public class AccountInfo
 { 
+    public void PersonalMenu()
+    {
+        Style.Title("Personal Menu");
+        Console.WriteLine("1: Personal info");
+        Console.WriteLine("2: Active reservations");
+        Console.WriteLine("3: Past reservations");
+        Console.WriteLine("4: Past bills");
+        int choice = Int32.Parse(Console.ReadLine());
+
+        if (choice == 1)
+        {
+            
+        }
+    }
+    
     public void ShowAccountInfo(AccountModel account)
     {
         if (account == null)

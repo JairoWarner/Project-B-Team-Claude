@@ -1,4 +1,4 @@
-public static class Print
+public static class Style
 {
     private const string Rood =          "\u001b[38;2;139;0;0m";
     private const string Goud =         "\u001b[38;2;255;215;0m";

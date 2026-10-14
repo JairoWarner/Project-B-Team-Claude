@@ -1,0 +1,8 @@
+﻿namespace Project.DataModels;
+
+public static class UserRole
+{
+    public static string Customer { get; } = "Customer";
+    public static string Admin { get; } = "Admin";
+    public static string Employee { get; } = "Employee";
+}

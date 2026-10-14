@@ -1,7 +1,11 @@
-public class Menu
+using Project.Presentation;
+
+public class CustomerMenu
 {
     public static void Start()
     {
+        AccountInfo accountInfo = new AccountInfo();
+        
         string menuChoice = "";
         while (menuChoice != "7")
         {
@@ -19,7 +23,7 @@ public class Menu
             switch (menuChoice)
             {
                 case "1":
-                    Console.WriteLine("Not implemented yet!");
+                    accountInfo.PersonalMenu();
                     break;
 
                 case "2":
