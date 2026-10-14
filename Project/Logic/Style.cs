@@ -1,11 +1,13 @@
+using System.Dynamic;
+
 public static class Print
 {
-    private const string Rood =          "\u001b[38;2;139;0;0m";
-    private const string Goud =         "\u001b[38;2;255;215;0m";
+    public const string Rood =          "\u001b[38;2;139;0;0m";
+    public const string Goud  =         "\u001b[38;2;255;215;0m";
     private const string Wit =        "\u001b[38;2;245;240;230m";
     private const string Groen =        "\u001b[38;2;34;139;34m";
     private const string Achtergrond =   "\u001b[48;2;26;26;26m";
-    private const string Reset =        "\u001b[0m";
+    public const string Reset =        "\u001b[0m";
 
     public static void Setup()
     {
