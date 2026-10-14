@@ -1,8 +1,8 @@
 public static class Style
 {
-    private const string Rood =             "\u001b[38;2;139;0;0m";
+    public const string Rood =             "\u001b[38;2;139;0;0m";
     private const string ErrorRood =         "\u001b[38;2;255;85;85m";   
-    private const string Goud =             "\u001b[38;2;255;215;0m";
+    public const string Goud =             "\u001b[38;2;255;215;0m";
     private const string Wit =              "\u001b[38;2;245;240;230m";
     private const string Groen =            "\u001b[38;2;34;139;34m";
     private const string SuccessGroen =     "\u001b[38;2;105;230;160m";
@@ -11,7 +11,7 @@ public static class Style
     private const string SuccessAchtergrond = "\u001b[48;2;16;61;39m";
     private const string LogoAchtergrond = "\u001b[48;2;100;0;0m";
     private const string Bold =             "\u001b[1m";
-    private const string Reset =            "\u001b[0m";
+    public const string Reset =            "\u001b[0m";
 
     public static void Setup()
     {
