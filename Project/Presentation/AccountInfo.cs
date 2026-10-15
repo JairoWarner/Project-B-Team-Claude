@@ -9,12 +9,13 @@ public class AccountInfo
         Console.WriteLine("2: Active reservations");
         Console.WriteLine("3: Past reservations");
         Console.WriteLine("4: Past bills");
-        int choice = Int32.Parse(Console.ReadLine());
+        string choice = Console.ReadLine();
 
-        if (choice == 1)
-        {
+        if (choice == "1")
+            ShowAccountInfo(AccountsLogic.CurrentAccount);
+        
+        // if (choice == "2")
             
-        }
     }
     
     public void ShowAccountInfo(AccountModel account)
@@ -25,9 +26,12 @@ public class AccountInfo
             return;
         }
         
+        Console.Clear();
         Console.WriteLine($"Name: {account.FullName}");
         Console.WriteLine($"Date of birth: {account.DateOfBirth}");
         Console.WriteLine($"Email: {account.EmailAddress}");
         Console.WriteLine($"Phone number: {account.Phone}");
+        Console.WriteLine($"\nPress Enter to continue");
+        Console.ReadLine();
     }
 }

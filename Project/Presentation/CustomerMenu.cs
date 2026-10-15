@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using Project.Presentation;
 
 public class CustomerMenu
 {
@@ -22,6 +23,8 @@ public class CustomerMenu
             switch (menuChoice)
             {
                 case "1":
+                    AccountInfo accountInfo = new();
+                    accountInfo.PersonalMenu();
                     break;
 
                 case "2":
