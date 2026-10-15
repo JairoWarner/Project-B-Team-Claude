@@ -37,8 +37,13 @@ static class UserLogin
                 {
                     Style.Success("Welcome back " + acc.FullName);
                     Style.Normal("Your email is " + acc.EmailAddress);
-
-                    CustomerMenu.Start();
+                    
+                    if (acc.Role == "Customer")
+                        CustomerMenu.Start();
+                    
+                    if (acc.Role == "Admin")
+                        Console.WriteLine("No admin menu yet. Womp Womp");
+                    
                     return;
                 }
 

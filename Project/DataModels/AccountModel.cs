@@ -1,6 +1,5 @@
 ﻿public class AccountModel
 {
-
     public Int64 Id { get; }
     public string EmailAddress { get; set; }
 

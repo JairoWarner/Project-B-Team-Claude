@@ -4,6 +4,7 @@ using System.Globalization;
 //This class is not static so later on we can use inheritance and interfaces
 using System.ComponentModel;
 using System.Text;
+using Project.DataModels;
 
 public class AccountsLogic
 {
@@ -166,7 +167,7 @@ public class AccountsLogic
                                     string password, string phonenumber, string DateofBirth)
     {
         var account = new AccountModel(0 ,$"{firstName} {lastName}",
-            email,password,phonenumber,"Customer",DateofBirth);
+            email,password,phonenumber, CustomerRole.Customer, DateofBirth);
         _access.Write(account);
     }
 }
