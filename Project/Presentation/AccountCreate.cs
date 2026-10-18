@@ -134,7 +134,7 @@ public static class AccountCreate
         Style.Title("Please enter your password");
         while (true)
         {
-            password = Console.ReadLine() ?? "";
+            password = AccountsLogic.PasswordTransform();
             if (!AccountsLogic.ValidatePassword(password))
             {
                 ShowPasswordError();
