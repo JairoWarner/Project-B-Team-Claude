@@ -9,29 +9,38 @@ public class ReservationLogic
     //private set, so this can only be set by the class itself
     private ReservationAccess _access = new();
 
-    public static string SetChildCategory(int age)
+
+    public int LimitPeople(int numberOfPeople)
     {
-        if (age < 4)
-        {
-            return "Child is too young";
-        }
-        else if (age <= 12)
-        {
-            return "4-12";
-        }
-        else
-        {
-            return "13-17";
-        }
+        return 0;
     }
+
+    // public static string SetChildCategory(int age)
+    // {
+    //     if (age < 4)
+    //     {
+    //         return "Child is too young";
+    //     }
+    //     else if (age <= 12)
+    //     {
+    //         return "4-12";
+    //     }
+    //     else
+    //     {
+    //         return "13-17";
+    //     }
+    // }
 
     public void AddReservation(ReservationModel reservation)
     {
-        
-
         // Title Case - to do
 
         _access.Write(reservation);
+    }
+
+    public List<ReservationModel> GetReservations()
+    {
+        return _access.GetAll();
     }
 
 }
