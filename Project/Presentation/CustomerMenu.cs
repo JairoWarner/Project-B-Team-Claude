@@ -33,7 +33,8 @@ public class CustomerMenu
                     break;
 
                 case "3":
-                    Console.WriteLine("Not implemented yet!");
+                    ShowReservation showReservations = new();
+                    showReservations.ShowReservations();
                     break;
 
                 case "4":

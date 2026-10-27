@@ -2,6 +2,7 @@
 using Dapper;
 using Microsoft.Data.Sqlite;
 using System.Globalization;
+using System.Linq;
 
 public class ReservationAccess
 {
@@ -28,5 +29,31 @@ public class ReservationAccess
         });
 
         Console.WriteLine("Reservation successfully created!");
+    }
+
+    public List<ReservationModel> GetAll()
+    {
+        string sql = $"SELECT ID AS Id, UserID, TableID AS SelectedTableId, Date, Time, People AS NumberOfPeople FROM {Table} ORDER BY Date, Time";
+        IEnumerable<ReservationRow> rows = _connection.Query<ReservationRow>(sql);
+
+        return rows.Select(row => new ReservationModel
+        {
+            Id = row.Id,
+            UserID = row.UserID,
+            SelectedTableId = row.SelectedTableId,
+            ReservationDate = DateTime.ParseExact(row.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture),
+            ReservationTime = DateTime.ParseExact(row.Time, "HH:mm", CultureInfo.InvariantCulture),
+            NumberOfPeople = row.NumberOfPeople
+        }).ToList();
+    }
+
+    private sealed class ReservationRow
+    {
+        public int Id { get; set; }
+        public int UserID { get; set; }
+        public int SelectedTableId { get; set; }
+        public string Date { get; set; } = "";
+        public string Time { get; set; } = "";
+        public int NumberOfPeople { get; set; }
     }
 }
