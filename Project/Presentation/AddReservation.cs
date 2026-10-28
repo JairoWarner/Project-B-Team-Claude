@@ -226,6 +226,7 @@ public class AddReservation
         }
 
         Console.WriteLine($"Table {table.TableId} has been assigned to your reservation.");
+        Console.ReadLine();
         Console.Clear();
         return table.TableId;
     }
