@@ -17,6 +17,7 @@
         <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.2" />
         <PackageReference Include="Dapper" Version="2.1.66" />
         <PackageReference Include="NAudio" Version="3.3.0" />
+        <None Update="Music\*.mp3" CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
 
 </Project>

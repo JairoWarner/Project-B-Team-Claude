@@ -11,7 +11,13 @@ public static class MusicPlayer
     {
         if (outputDevice == null)
         {
-            audioFile = new AudioFileReader(@"C:\Users\jairo\Project-B-Team-Merch\Project\Music\mao zedong propaganda music Red Sun in the Sky.mp3");
+            string musicPath = Path.Combine(
+                AppContext.BaseDirectory,
+                "Music",
+                "mao zedong propaganda music Red Sun in the Sky.mp3"
+            );
+
+            audioFile = new AudioFileReader(musicPath);
 
             outputDevice = new WaveOutEvent();
             outputDevice.Init(audioFile);
