@@ -8,7 +8,13 @@ static class UserLogin
             
             Style.Normal("1: to create an account");
             Style.Normal("2: to Log in");
+            Style.Normal("3: to exit the program");
             string choice = Console.ReadLine();
+
+            if (choice == "3")
+            {
+                Environment.Exit(0);
+            }
             
             if  (choice == "1")
                 AccountCreate.Start();

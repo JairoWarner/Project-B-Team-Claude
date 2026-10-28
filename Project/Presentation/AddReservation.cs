@@ -1,27 +1,37 @@
 public class AddReservation
 {
     private readonly ReservationLogic _logic = new();
+    private readonly RestaurantTableAccess _tableAccess = new();
 
     public int NumberOfPeople { get; private set; } = 1;
     public int NumberOfChildren { get; private set; }
 
     public void start()
     {
-        AskPeople();
-        AskChildren();
-        DateTime reservationDate = AskDateAndTime();
-        int selectedTableId = AskTable();
+        if (!AskPeople() || !AskChildren())
+        {
+            return;
+        }
+
+        DateTime? reservationDate = AskDateAndTime();
+        if (reservationDate is null)
+        {
+            return;
+        }
+
+        int selectedTableId = AskTable(reservationDate.Value);
 
         _logic.AddReservation(new ReservationModel
         {
             NumberOfPeople = NumberOfPeople,
             NumberOfChildren = NumberOfChildren,
-            ReservationDate = reservationDate.Date,
-            ReservationTime = reservationDate,
+            ReservationDate = reservationDate.Value.Date,
+            ReservationTime = reservationDate.Value,
             SelectedTableId = selectedTableId
         });
 
         Console.WriteLine("Reservation added successfully!");
+        Console.ReadLine();
     }
 
     // public ReservationModel ReservationAdd()
@@ -69,17 +79,22 @@ public class AddReservation
     //     return reservation;
     // }
 
-    public void AskPeople()
+    public bool AskPeople()
     {
         while (true)
         {
-            Console.WriteLine("How many people are in your reservation?(MIN 0, MAX 6)(including children)");
+            Console.WriteLine("How many people are in your reservation?(MIN 0, MAX 6)(including children) (Enter M to return to the main menu)");
             string? input = Console.ReadLine();
+
+            if (input?.ToUpper() == "M")
+            {
+                return false;
+            }
 
             if (string.IsNullOrWhiteSpace(input))
             {
                 NumberOfPeople = 1;
-                return;
+                return true;
             }
 
             if (!int.TryParse(input, out int numberOfPeople))
@@ -91,19 +106,26 @@ public class AddReservation
             if (numberOfPeople >= 0)
             {
                 NumberOfPeople = numberOfPeople;
-                return;
+                Console.Clear();
+                return true;
             }
 
             Console.WriteLine("Number of people cannot be lower than 0");
+            Console.Clear();
         }
     }
 
-    public void AskChildren()
+    public bool AskChildren()
     {
         while (true)
         {
-            Console.WriteLine("How many children are in your reservation?(MIN 0, MAX 5)");
+            Console.WriteLine("How many children are in your reservation?(MIN 0, MAX 5) (Enter M to return to the main menu)");
             string? input = Console.ReadLine();
+
+            if (input?.ToUpper() == "M")
+            {
+                return false;
+            }
 
             if (string.IsNullOrWhiteSpace(input))
             {
@@ -121,42 +143,84 @@ public class AddReservation
 
             if (NumberOfChildren < NumberOfPeople)
             {
-                return;
+                Console.Clear();
+                return true;
             }
 
             Console.WriteLine("Number of children cannot be higher than total number of people");
         }
     }
 
-    public DateTime AskDateAndTime()
+    public DateTime? AskDateAndTime()
     {
-        Console.WriteLine("What date would you like to make the reservation for? (dd-mm-yyyy)");
         DateTime reservationDate;
-        while (!DateTime.TryParseExact(Console.ReadLine(), "dd-MM-yyyy", null, System.Globalization.DateTimeStyles.None, out reservationDate))
+        while (true)
         {
-            Console.WriteLine("Invalid date format. Please enter the date in the format dd-mm-yyyy:");
+            Console.WriteLine("What date would you like to make the reservation for? (dd-mm-yyyy) (Enter M to return to the main menu)");
+            string? input = Console.ReadLine();
+
+            if (input?.ToUpper() == "M")
+            {
+                return null;
+            }
+
+            if (!DateTime.TryParseExact(input, "dd-MM-yyyy", null, System.Globalization.DateTimeStyles.None, out reservationDate))
+            {
+                Console.WriteLine("Invalid date format. Please enter the date in the format dd-mm-yyyy:");
+                continue;
+            }
+
+            if (reservationDate.Date <= DateTime.Today)
+            {
+                Console.WriteLine("Reservations can only be made for a date after today.");
+                continue;
+            }
+
+            if (_tableAccess.GetTablesForDate(reservationDate, NumberOfPeople).Count == 0)
+            {
+                Console.WriteLine("That date is fully booked. Please choose another date.");
+                continue;
+            }
+            Console.Clear();
+
+            break;
         }
         
 
-        Console.WriteLine("What time would you like to make the reservation for? (hh:mm)");
         DateTime reservationTime;
-        while (!DateTime.TryParseExact(Console.ReadLine(), "HH:mm", null, System.Globalization.DateTimeStyles.None, out reservationTime))
+        while (true)
         {
+            Console.WriteLine("What time would you like to make the reservation for? (hh:mm) (Enter M to return to the main menu)");
+            string? input = Console.ReadLine();
+
+            if (input?.ToUpper() == "M")
+            {
+                return null;
+            }
+
+            if (DateTime.TryParseExact(input, "HH:mm", null, System.Globalization.DateTimeStyles.None, out reservationTime))
+            {
+                break;
+            }
+
             Console.WriteLine("Invalid time format. Please enter the time in the format hh:mm:");
         }
+        Console.Clear();
 
         return reservationDate.Date.Add(reservationTime.TimeOfDay);
     }
 
-    public int AskTable()
+    public int AskTable(DateTime reservationDate)
     {
-        Console.WriteLine("What table would you like to reserve?");
-        int selectedTableId;
-        while (!int.TryParse(Console.ReadLine(), out selectedTableId) || selectedTableId <= 0)
+        List<RestaurantTableModel> tables = _tableAccess.GetTablesForDate(reservationDate, NumberOfPeople);
+        RestaurantTableModel? table = tables.FirstOrDefault();
+        if (table is null)
         {
-            Console.WriteLine("Invalid table ID. Please enter a valid table ID:");
+            throw new InvalidOperationException("No available restaurant tables.");
         }
 
-        return selectedTableId;
+        Console.WriteLine($"Table {table.TableId} has been assigned to your reservation.");
+        Console.Clear();
+        return table.TableId;
     }
 }
