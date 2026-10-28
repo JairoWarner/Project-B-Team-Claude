@@ -78,8 +78,8 @@ public class AccountsLogic
     
     public static string PasswordTransform()
     {
-        var password = new StringBuilder();
-
+        string password = "";
+        
         while (true)
         {
             ConsoleKeyInfo key = Console.ReadKey(true);
@@ -89,17 +89,19 @@ public class AccountsLogic
                 Console.WriteLine();
                 break;
             }
-            else if (key.Key == ConsoleKey.Backspace)
+            
+            if (key.Key == ConsoleKey.Backspace)
             {
                 if (password.Length > 0)
                 {
-                    password.Remove(password.Length - 1, 1);
+                    password = password.Substring(0, password.Length - 1);
                     Console.Write("\b \b");
                 }
             }
-            else if (!char.IsControl(key.KeyChar))
+            
+            if (!char.IsControl(key.KeyChar))
             {
-                password.Append(key.KeyChar);
+                password += key.KeyChar;
                 Console.Write('*');
             }
         }
