@@ -52,7 +52,7 @@ public static class AccountCreate
         while (true)
         {
             LastName = Console.ReadLine();  
-            if (!AccountsLogic.ValidateLastName(FirstName))
+            if (!AccountsLogic.ValidateLastName(LastName))
             {
                 ShowLastNameError();    
                 continue;
