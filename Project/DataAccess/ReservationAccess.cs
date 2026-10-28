@@ -28,7 +28,7 @@ public class ReservationAccess
             People = reservation.NumberOfPeople
         });
 
-        Console.WriteLine("Reservation successfully created!");
+        // Console.WriteLine("Reservation successfully created!");
     }
 
     public List<ReservationModel> GetAll()

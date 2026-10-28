@@ -1,7 +1,7 @@
 public class ReservationModel
 {
 	public int Id { get; set; }
-	public int UserID { get; set; }
+	public long UserID { get; set; }
 	public int NumberOfPeople { get; set; } = 1;
 	public int NumberOfChildren { get; set; } = 0;
 	public DateTime ReservationDate { get; set; }
@@ -12,7 +12,7 @@ public class ReservationModel
 	{
 	}
 
-    public ReservationModel(int UserID, int numberOfPeople, int numberOfChildren, DateTime reservationDate, DateTime reservationTime, int selectedTableId)
+    public ReservationModel(long UserID, int numberOfPeople, int numberOfChildren, DateTime reservationDate, DateTime reservationTime, int selectedTableId)
     {
         this.UserID = UserID;
         NumberOfPeople = numberOfPeople;
