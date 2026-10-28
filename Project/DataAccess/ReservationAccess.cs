@@ -21,14 +21,14 @@ public class ReservationAccess
         string sql = $"INSERT INTO {Table} (UserID, TableID, Time, Date, People) VALUES (@UserID, @TableID, @Time, @Date, @People)";
         _connection.Execute(sql, new
         {
-            UserID = 1,
+            UserID = reservation.UserID,
             TableID = reservation.SelectedTableId,
             Time = reservation.ReservationTime.ToString("HH:mm"),
             Date = reservation.ReservationDate.ToString("yyyy-MM-dd"),
             People = reservation.NumberOfPeople
         });
 
-        // Console.WriteLine("Reservation successfully created!");
+        Console.WriteLine("Reservation successfully created!");
     }
 
     public List<ReservationModel> GetAll()

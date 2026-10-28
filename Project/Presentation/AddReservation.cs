@@ -20,9 +20,15 @@ public class AddReservation
         }
 
         int selectedTableId = AskTable(reservationDate.Value);
+        AccountModel? currentAccount = AccountsLogic.CurrentAccount;
+        if (currentAccount is null)
+        {
+            throw new InvalidOperationException("A logged-in account is required to make a reservation.");
+        }
 
         _logic.AddReservation(new ReservationModel
         {
+            UserID = currentAccount.Id,
             NumberOfPeople = NumberOfPeople,
             NumberOfChildren = NumberOfChildren,
             ReservationDate = reservationDate.Value.Date,
