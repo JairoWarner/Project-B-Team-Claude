@@ -1,6 +1,6 @@
 ﻿public class AccountModel
 {
-    public Int64 Id { get; }
+    public long Id { get; }
     public string EmailAddress { get; set; }
 
     public string Password { get; set; }
@@ -10,7 +10,7 @@
     public string Role { get; set; }
     public string DateOfBirth { get; set; }
 
-    public AccountModel(Int64 id, string fullname, string email, string password, string phone, string role, string dateofbirth)
+    public AccountModel(long id, string fullname, string email, string password, string phone, string role, string dateofbirth)
     {
         Id = id;
         FullName = fullname;
@@ -21,6 +21,4 @@
         DateOfBirth = dateofbirth;
     }
 }
-
-
 
