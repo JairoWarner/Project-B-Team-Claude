@@ -1,6 +1,9 @@
 using System;
 using System.Linq;
 using System.Globalization;
+using NAudio.Wave;
+using Project.Music;
+
 public static class AccountCreate
 {   
     public static String FirstName = "";
@@ -10,19 +13,29 @@ public static class AccountCreate
     public static String email = "";
     public static String Phonenumber = "";
     public static String password = "";
+    
 //====================================================================
     public static void Start()
     {
-        Console.Clear();
+        MusicPlayer.MusicStart();
         
+        Console.Clear();
+
         Style.Title("1: Login");
         Style.Title("2: Register");
-        string choice = Console.ReadLine();
-        
+
+        string? choice = Console.ReadLine();
+
         if (choice == "1")
+        {
             UserLogin.LoginStart();
-        
-        Firstname();
+            return;
+        }
+
+        if (choice == "2")
+        {
+            Firstname();
+        }
     }
     
 //====================================================================
