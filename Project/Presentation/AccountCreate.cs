@@ -1,8 +1,7 @@
 using System;
 using System.Linq;
 using System.Globalization;
-using NAudio.Wave;
-using Project.Music;
+
 
 public static class AccountCreate
 {   
@@ -17,7 +16,6 @@ public static class AccountCreate
 //====================================================================
     public static void Start()
     {
-        MusicPlayer.MusicStart();
         
         Console.Clear();
 
