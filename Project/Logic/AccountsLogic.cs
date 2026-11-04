@@ -59,7 +59,7 @@ public class AccountsLogic
 
     public static AccountModel? CheckLogin(string email, string password)
     {
-        AccountModel acc = _access.GetByEmail(email);
+        AccountModel? acc = _access.GetByEmail(email);
 
         if (acc == null)
         {
@@ -67,19 +67,14 @@ public class AccountsLogic
             return null;
         }
 
-        if (acc.Password != password)
+        if (!VerifyPassword(password, acc.Password))
         {
             Style.Error("Password is invalid");
             return null;
         }
 
-        if (VerifyPassword(password, acc.Password))
-        {
-            CurrentAccount = acc;
-            return acc;   
-        }
-
-        return null;
+        CurrentAccount = acc;
+        return acc;
     }
 
     public static string PasswordTransform()
