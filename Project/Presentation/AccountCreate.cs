@@ -17,8 +17,6 @@ public static class AccountCreate
 //====================================================================
     public static void Start()
     {
-        MusicPlayer.MusicStart();
-        
         Console.Clear();
 
         Style.Title("1: Login");
