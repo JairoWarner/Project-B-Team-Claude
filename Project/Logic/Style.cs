@@ -31,7 +31,7 @@ public static class Style
         Console.WriteLine(             @"           `\\´´\¸.·´         "        );
         Console.WriteLine(             @"                              " + Reset);
         Console.WriteLine(Goud +        "==============================" + Reset);
-        Console.WriteLine(Bold + Goud + "       Imperial dragon        " + Reset);
+        Console.WriteLine(Bold + Goud + "            Zhà Gǒu           " + Reset);
         Console.WriteLine(Goud +        "==============================" + Reset);
     }
     public static void Title(string text)

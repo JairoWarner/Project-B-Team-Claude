@@ -1,8 +1,7 @@
 using System;
 using System.Linq;
 using System.Globalization;
-using NAudio.Wave;
-using Project.Music;
+
 
 public static class AccountCreate
 {   
@@ -17,6 +16,7 @@ public static class AccountCreate
 //====================================================================
     public static void Start()
     {
+        
         Console.Clear();
 
         Style.Title("1: Login");
