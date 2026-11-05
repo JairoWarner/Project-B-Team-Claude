@@ -4,6 +4,7 @@ public static class Style
     public const string ErrorRood =         "\u001b[38;2;255;85;85m";   
     public const string Goud =             "\u001b[38;2;255;215;0m";
     public const string Wit =              "\u001b[38;2;245;240;230m";
+    public const string LightGrey = "\u001b[38;2;200;200;200m";
     public const string Groen =            "\u001b[38;2;34;139;34m";
     public const string SuccessGroen =     "\u001b[38;2;105;230;160m";
     public const string Achtergrond =      "\u001b[48;2;26;26;26m";

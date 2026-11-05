@@ -142,20 +142,34 @@ public static class AccountCreate
     public static void Password()
     {
         Style.Title("Please enter your password");
+
         while (true)
         {
             password = AccountsLogic.PasswordTransform();
+
             if (!AccountsLogic.ValidatePassword(password))
             {
                 ShowPasswordError();
                 continue;
             }
+
+            Style.Title("Please enter your password again to confirm");
+            string confirmPassword = AccountsLogic.PasswordTransform();
+
+            if (password != confirmPassword)
+            {
+                Style.Title("Passwords do not match. Please try again.");
+                continue;
+            }
             break;
         }
+
         Style.Logo();
         Style.SuccesHeader();
-        Style.Success("Password is correct toegevoegd!");
+        Style.Success("Password is successfully added!");
+
         AccountsLogic.CreateAccount(FirstName, LastName, email, password, Phonenumber, DateofBirth);
+
         UserLogin.LoginStart();
     }
 //===================================================================

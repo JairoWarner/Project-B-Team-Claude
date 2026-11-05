@@ -16,7 +16,6 @@ public class AccountsLogic
     {
         if (string.IsNullOrEmpty(email))
         {
-            Style.Error("Email is required");
             return false;
         }
 
@@ -25,7 +24,6 @@ public class AccountsLogic
 
         if (!email.Contains("@") || !email.Contains(".") || index1 > index2 || email.Contains(" "))
         {
-            Style.Error("invalid email format");
             return false;
         }
 
@@ -33,7 +31,6 @@ public class AccountsLogic
 
         if (part.Length < 3)
         {
-            Style.Error("Email is too short");
             return false;
         }
 
@@ -44,13 +41,11 @@ public class AccountsLogic
     {
         if (string.IsNullOrEmpty(password))
         {
-            Style.Error("Password is required");
             return false;
         }
 
         if (password.Length < 8)
         {
-            Style.Error("Password has to be at least 8 characters long");
             return false;
         }
 
