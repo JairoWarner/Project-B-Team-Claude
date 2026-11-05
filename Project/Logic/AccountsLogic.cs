@@ -5,6 +5,7 @@ using System.Globalization;
 using System.ComponentModel;
 using System.Text;
 using Project.DataModels;
+using System.Security.Cryptography;
 
 public class AccountsLogic
 {
@@ -15,24 +16,21 @@ public class AccountsLogic
     {
         if (string.IsNullOrEmpty(email))
         {
-            Style.Error("Email is required");
             return false;
         }
-        
+
         int index1 = email.IndexOf("@");
         int index2 = email.IndexOf(".");
 
         if (!email.Contains("@") || !email.Contains(".") || index1 > index2 || email.Contains(" "))
         {
-            Style.Error("invalid email format");
             return false;
         }
-        
+
         string part = email.Split('@')[0];
 
         if (part.Length < 3)
         {
-            Style.Error("Email is too short");
             return false;
         }
 
@@ -43,30 +41,28 @@ public class AccountsLogic
     {
         if (string.IsNullOrEmpty(password))
         {
-            Style.Error("Password is required");
             return false;
         }
-        
+
         if (password.Length < 8)
         {
-            Style.Error("Password has to be at least 8 characters long");
             return false;
         }
-        
+
         return true;
     }
 
     public static AccountModel? CheckLogin(string email, string password)
     {
-        AccountModel acc = _access.GetByEmail(email);
-        
+        AccountModel? acc = _access.GetByEmail(email);
+
         if (acc == null)
         {
             Style.Error("Email is invalid");
             return null;
         }
-        
-        if (acc.Password != password)
+
+        if (!VerifyPassword(password, acc.Password))
         {
             Style.Error("Password is invalid");
             return null;
@@ -75,11 +71,11 @@ public class AccountsLogic
         CurrentAccount = acc;
         return acc;
     }
-    
+
     public static string PasswordTransform()
     {
         string password = "";
-        
+
         while (true)
         {
             ConsoleKeyInfo key = Console.ReadKey(true);
@@ -89,7 +85,7 @@ public class AccountsLogic
                 Console.WriteLine();
                 break;
             }
-            
+
             if (key.Key == ConsoleKey.Backspace)
             {
                 if (password.Length > 0)
@@ -98,7 +94,7 @@ public class AccountsLogic
                     Console.Write("\b \b");
                 }
             }
-            
+
             if (!char.IsControl(key.KeyChar))
             {
                 password += key.KeyChar;
@@ -108,42 +104,49 @@ public class AccountsLogic
 
         return password.ToString();
     }
+
     public static bool ValidateFirstName(string FirstName)
     {
         return !string.IsNullOrEmpty(FirstName)
-            && FirstName.Length >= 2
-            && FirstName.Length <= 16
-            && FirstName.All(char.IsLetter);
+               && FirstName.Length >= 2
+               && FirstName.Length <= 16
+               && FirstName.All(char.IsLetter);
     }
+
     public static bool ValidateLastName(string LastName)
     {
         return !string.IsNullOrEmpty(LastName)
-        && LastName.Length >= 2
-        && LastName.Length <= 16
-        && LastName.All(char.IsLetter);
+               && LastName.Length >= 2
+               && LastName.Length <= 16
+               && LastName.All(char.IsLetter);
     }
+
     public static bool ValidateDateofBirth(string DateofBirth)
     {
-    if (!DateTime.TryParseExact(DateofBirth,
-        "dd/MM/yyyy",CultureInfo.InvariantCulture,
-        DateTimeStyles.None,out DateTime birthdate))
+        if (!DateTime.TryParseExact(DateofBirth,
+                "dd/MM/yyyy", CultureInfo.InvariantCulture,
+                DateTimeStyles.None, out DateTime birthdate))
         {
             return false;
         }
+
         int age = DateTime.Today.Year - birthdate.Year;
-        
+
         if (birthdate > DateTime.Today || age > 130 || age < 16)
         {
             return false;
         }
-    return true;
-    }   
+
+        return true;
+    }
+
     public static bool ValidateEmail(string email)
     {
         return !string.IsNullOrWhiteSpace(email)
-            && !email.Contains(' ') && email.Contains('@')
-            && email.Contains('.') && email.IndexOf('@') >= 3;
+               && !email.Contains(' ') && email.Contains('@')
+               && email.Contains('.') && email.IndexOf('@') >= 3;
     }
+
     public static bool EmailExists(string email)
     {
         return _access.GetByEmail(email) != null;
@@ -152,25 +155,81 @@ public class AccountsLogic
     public static bool ValidatePhoneNumber(string Phonenumber)
     {
         return !string.IsNullOrWhiteSpace(Phonenumber)
-            && Phonenumber.All(c => char.IsDigit(c) || c == '+' || c == '-' || c == ' ')
-            && Phonenumber.Count(char.IsDigit) >= 8
-            && Phonenumber.Count(char.IsDigit) <= 15;
+               && Phonenumber.All(c => char.IsDigit(c) || c == '+' || c == '-' || c == ' ')
+               && Phonenumber.Count(char.IsDigit) >= 8
+               && Phonenumber.Count(char.IsDigit) <= 15;
     }
+
     public static bool ValidatePassword(string password)
     {
         return !string.IsNullOrEmpty(password)
-            && password.Length >= 8 && password.Length <= 16
-            && password.Any(c => !char.IsLetterOrDigit(c) && !char.IsWhiteSpace(c))
-            && password.Any(char.IsUpper);
+               && password.Length >= 8 && password.Length <= 16
+               && password.Any(c => !char.IsLetterOrDigit(c) && !char.IsWhiteSpace(c))
+               && password.Any(char.IsUpper);
     }
 
 
-    public static void CreateAccount(string firstName, string lastName, string email,
-                                    string password, string phonenumber, string DateofBirth)
+    public static void CreateAccount(string firstName, string lastName, string email, string password, string phonenumber, string DateofBirth)
     {
-        var account = new AccountModel(0 ,$"{firstName} {lastName}",
-            email,password,phonenumber, CustomerRole.Customer, DateofBirth);
+        string HashedPassword = HashPassword(password);
+        
+        var account = new AccountModel(0, $"{firstName} {lastName}", email, HashedPassword, phonenumber, CustomerRole.Customer, DateofBirth);
         _access.Write(account);
     }
-}
 
+    public static string HashPassword(string password)
+    {
+        byte[] salt = RandomNumberGenerator.GetBytes(16);
+
+        var pbkdf2 = new Rfc2898DeriveBytes(
+            password,
+            salt,
+            100000,
+            HashAlgorithmName.SHA256);
+
+        byte[] hash = pbkdf2.GetBytes(32);
+
+        return Convert.ToBase64String(salt) + "." +
+               Convert.ToBase64String(hash);
+    }
+
+    public static bool VerifyPassword(string password, string storedHash)
+    {
+        if (string.IsNullOrEmpty(storedHash))
+        {
+            return false;
+        }
+
+        if (!storedHash.Contains('.'))
+        {
+            return string.Equals(password, storedHash, StringComparison.Ordinal);
+        }
+
+        var parts = storedHash.Split('.', 2);
+
+        if (parts.Length != 2)
+        {
+            return false;
+        }
+
+        try
+        {
+            byte[] salt = Convert.FromBase64String(parts[0]);
+            byte[] hash = Convert.FromBase64String(parts[1]);
+
+            var pbkdf2 = new Rfc2898DeriveBytes(
+                password,
+                salt,
+                100000,
+                HashAlgorithmName.SHA256);
+
+            byte[] testHash = pbkdf2.GetBytes(32);
+
+            return CryptographicOperations.FixedTimeEquals(hash, testHash);
+        }
+        catch (FormatException)
+        {
+            return string.Equals(password, storedHash, StringComparison.Ordinal);
+        }
+    }
+}

@@ -4,6 +4,7 @@ static class UserLogin
     {
         while (true)
         {
+            Console.Clear();
             Style.Title("Welcome to the login page");
             
             Style.Normal("1: to create an account");
@@ -18,25 +19,43 @@ static class UserLogin
             {
                 Environment.Exit(0);
             }
+            
+            Console.Clear();
+            Style.Title("Welcome to the login page\n");
 
-            Style.Normal($"Please enter your {Style.Groen}email{Style.Reset} address:");
-            string email = Console.ReadLine();
-
-            if (!AccountsLogic.CheckEmail(email))
-            {
-                continue;
-            }
-
+            int Count = 0;
+            
             while (true)
             {
-                Console.Clear();
-                Style.Title("Welcome to the login page\n");
-                Style.Normal($"Please enter your {Style.Groen}password{Style.Reset}:");
+                if (Count == 3)
+                {
+                     Style.Error("To many try's your timed out");
+                     Thread.Sleep(30000);
+                     Count = 0;
+                     continue;
+                }
                 
+                Style.Normal($"Please enter your {Style.Groen}email{Style.Reset} address:");
+                string email = Console.ReadLine();
+                
+                Style.Normal($"Please enter your {Style.Groen}password{Style.Reset}:");
                 string password = AccountsLogic.PasswordTransform();
 
                 if (!AccountsLogic.CheckPassword(password))
                 {
+                    Count += 1;
+                    Console.Clear();
+                    Style.Title("Welcome to the login page\n");
+                    Style.Error("Email or password is wrong");
+                    continue;
+                }
+                
+                if (!AccountsLogic.CheckEmail(email))
+                {
+                    Count++;
+                    Console.Clear();
+                    Style.Title("Welcome to the login page\n");
+                    Style.Error("Email or password is wrong");
                     continue;
                 }
 
