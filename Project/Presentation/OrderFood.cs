@@ -1,5 +1,6 @@
 public class OrderFood
 {
+    public static AccountModel? CurrentAccount { get; private set; }
     private readonly OrderLogic _orderLogic = new();
     private readonly MenuLogic _menuLogic = new();
     private readonly FoodLogic _foodLogic = new();
@@ -24,7 +25,7 @@ public class OrderFood
         return _orderLogic.Save();
     }
 
-    private bool AskPreOrder()
+    public bool AskPreOrder()
     {
         while (true)
         {

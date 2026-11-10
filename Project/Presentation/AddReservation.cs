@@ -8,6 +8,8 @@ public class AddReservation
 
     public void start()
     {
+        AccountModel? acc = AccountsLogic.CurrentAccount;
+        OrderFood orderFood = new();
         DateTime? reservationDate = AskDateAndTime();
         if (reservationDate is null)
         {
@@ -18,6 +20,8 @@ public class AddReservation
         {
             return;
         }
+
+        orderFood.PlaceOrder(acc);
 
         List<RestaurantTableModel> availableTables = _tableAccess.GetTablesAvailableAt(reservationDate.Value, NumberOfPeople);
         if (availableTables.Count == 0)
