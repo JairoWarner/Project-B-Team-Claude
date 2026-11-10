@@ -21,7 +21,7 @@ public class ReservationLogic
 
     public static bool ValidateNumberOfPeople(int numberOfPeople)
     {
-        return numberOfPeople >= 1 && numberOfPeople <= 6;
+        return numberOfPeople >= 1 && numberOfPeople <= 8;
     }
 
     public static bool ValidateNumberOfChildren(int numberOfChildren, int numberOfPeople)
@@ -33,7 +33,7 @@ public class ReservationLogic
     {
         if (!ValidateNumberOfPeople(reservation.NumberOfPeople))
         {
-            throw new InvalidOperationException("Number of people must be between 1 and 6");
+            throw new InvalidOperationException("Number of people must be between 1 and 8");
         }
 
         if (!ValidateNumberOfChildren(reservation.NumberOfChildren, reservation.NumberOfPeople))

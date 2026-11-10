@@ -95,9 +95,10 @@ public static class RestaurantMap
 
         Console.WriteLine();
         Console.WriteLine("Legend:");
-        Console.WriteLine($"{Style.Groen}[  ]{Style.Reset} Free");
-        Console.WriteLine($"{Style.Rood}[  ]{Style.Reset} Reserved");
-        Console.WriteLine($"{Style.Goud}[  ]{Style.Reset} Your table");
+        Console.WriteLine($"{Style.Groen}[  ]{Style.Reset} Free          Tables 1-8:   2 seats");
+        Console.WriteLine($"{Style.Rood}[  ]{Style.Reset} Reserved      Tables 9-13:  4 seats");
+        Console.WriteLine($"{Style.Goud}[  ]{Style.Reset} Your table    Tables 14-15: 6 seats");
+        Console.WriteLine("                   Table 16:     8 seats");
     }
 
     private static void DrawTable(int tableId, List<int> reservedIds, List<int> userIds)

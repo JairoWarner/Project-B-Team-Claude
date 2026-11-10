@@ -59,7 +59,7 @@ public class AddReservation
     {
         while (true)
         {
-            Console.WriteLine("How many people are in your reservation?(MIN 1, MAX 6)(including children) (Enter M to return to the main menu)");
+            Console.WriteLine("How many people are in your reservation?(MIN 1, MAX 8)(including children) (Enter M to return to the main menu)");
             string? input = Console.ReadLine();
 
             if (input?.ToUpper() == "M")
@@ -86,7 +86,7 @@ public class AddReservation
                 return true;
             }
 
-            Console.WriteLine("Number of people must be between 1 and 6");
+            Console.WriteLine("Number of people must be between 1 and 8");
         }
     }
 
