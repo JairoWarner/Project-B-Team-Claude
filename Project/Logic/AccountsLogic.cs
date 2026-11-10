@@ -109,8 +109,7 @@ public class AccountsLogic
     {
         return !string.IsNullOrEmpty(FirstName)
                && FirstName.Length >= 2
-               && FirstName.Length <= 16
-               && FirstName.All(char.IsLetter);
+               && FirstName.Length <= 16;
     }
 
     public static bool ValidateLastName(string LastName)

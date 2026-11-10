@@ -51,7 +51,6 @@ public static class AccountCreate
             break;
         }
         Style.Logo();
-        Style.SuccesHeader();
         Style.Success($"{FirstName} is correct toegevoegd!");
         Lastname();
     }
@@ -70,7 +69,6 @@ public static class AccountCreate
             break;
         }
         Style.Logo();
-        Style.SuccesHeader();
         Style.Success($"{LastName} is correct toegevoegd!");
         Dateofbirth();
     }
@@ -86,11 +84,10 @@ public static class AccountCreate
                 ShowDateError();
                 continue;
             }
-            Birthdate = DateTime.ParseExact(DateofBirth,"dd/MM/yyyy",CultureInfo.InvariantCulture);
+            Birthdate = DateTime.ParseExact(DateofBirth,"dd/mm/yyyy",CultureInfo.InvariantCulture);
             break;
         }
         Style.Logo();
-        Style.SuccesHeader();
         Style.Success($"{DateofBirth} is correct toegevoegd!");
         Emailaddress();
 }
@@ -115,7 +112,6 @@ public static class AccountCreate
             break;
         }
         Style.Logo();
-        Style.SuccesHeader();
         Style.Success($"{email} is correct toegevoegd!");
         PhoneNumber();
     }
@@ -134,7 +130,6 @@ public static class AccountCreate
             break;
         }
         Style.Logo();
-        Style.SuccesHeader();
         Style.Success($"{Phonenumber} is correct toegevoegd!");
         Password();
     }
@@ -165,7 +160,6 @@ public static class AccountCreate
         }
 
         Style.Logo();
-        Style.SuccesHeader();
         Style.Success("Password is successfully added!");
 
         AccountsLogic.CreateAccount(FirstName, LastName, email, password, Phonenumber, DateofBirth);
