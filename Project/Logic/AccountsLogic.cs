@@ -58,13 +58,13 @@ public class AccountsLogic
 
         if (acc == null)
         {
-            Style.Error("Email is invalid");
+            Style.Error("Email or password is wrong");
             return null;
         }
 
         if (!VerifyPassword(password, acc.Password))
         {
-            Style.Error("Password is invalid");
+            Style.Error("Email or password is wrong");
             return null;
         }
 

@@ -9,8 +9,6 @@ public class AccountAccess
     
     public AccountAccess()
     {
-        Console.WriteLine("hoi");
-        
         string dbPath = Path.GetFullPath(
             Path.Combine(
                 AppContext.BaseDirectory,
@@ -21,7 +19,6 @@ public class AccountAccess
                 "project.db"
             )
         );
-        Console.WriteLine($"Database path: {dbPath}");
         _connection = new SqliteConnection($"Data Source={dbPath}");
     }
 
