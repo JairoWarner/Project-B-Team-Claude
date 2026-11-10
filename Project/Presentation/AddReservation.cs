@@ -8,35 +8,64 @@ public class AddReservation
 
     public void start()
     {
-        if (!AskPeople() || !AskChildren())
-        {
-            return;
-        }
-
         DateTime? reservationDate = AskDateAndTime();
         if (reservationDate is null)
         {
             return;
         }
 
-        int selectedTableId = AskTable(reservationDate.Value);
+        if (!AskPeople() || !AskChildren())
+        {
+            return;
+        }
+
+        List<RestaurantTableModel> availableTables = _tableAccess.GetTablesAvailableAt(reservationDate.Value, NumberOfPeople);
+        if (availableTables.Count == 0)
+        {
+            bool aTableFitsTheParty = _tableAccess.GetTablesForDate(reservationDate.Value, NumberOfPeople).Count > 0;
+            if (aTableFitsTheParty && !_tableAccess.HasAvailabilityDuringDay(reservationDate.Value, NumberOfPeople))
+            {
+                Console.WriteLine("Table is booked full for the day, please select another table");
+            }
+            else if (_tableAccess.HasOngoingReservation(reservationDate.Value, NumberOfPeople))
+            {
+                Console.WriteLine("During the selected time there is an ongoing reservation");
+            }
+            else
+            {
+                Console.WriteLine("Table is already booked at this time, please select a different time");
+            }
+
+            Console.ReadLine();
+            return;
+        }
+
         AccountModel? currentAccount = AccountsLogic.CurrentAccount;
         if (currentAccount is null)
         {
             throw new InvalidOperationException("A logged-in account is required to make a reservation.");
         }
 
-        _logic.AddReservation(new ReservationModel
+        try
         {
-            UserID = currentAccount.Id,
-            NumberOfPeople = NumberOfPeople,
-            NumberOfChildren = NumberOfChildren,
-            ReservationDate = reservationDate.Value.Date,
-            ReservationTime = reservationDate.Value,
-            SelectedTableId = selectedTableId
-        });
+            int selectedTableId = AskTable(reservationDate.Value);
+            _logic.AddReservation(new ReservationModel
+            {
+                UserID = currentAccount.Id,
+                NumberOfPeople = NumberOfPeople,
+                NumberOfChildren = NumberOfChildren,
+                ReservationDate = reservationDate.Value.Date,
+                ReservationTime = reservationDate.Value,
+                SelectedTableId = selectedTableId
+            });
 
-        Console.WriteLine("Reservation added successfully!");
+            Console.WriteLine("Reservation added successfully!");
+        }
+        catch (InvalidOperationException exception)
+        {
+            Console.WriteLine(exception.Message);
+        }
+
         Console.ReadLine();
     }
 
@@ -176,17 +205,15 @@ public class AddReservation
                 continue;
             }
 
-            if (reservationDate.Date <= DateTime.Today)
+            DateTime currentTime = DateTime.Now;
+            ReservationDateTimeValidationResult dateValidation =
+                ReservationLogic.ValidateReservationDate(reservationDate, currentTime);
+            if (dateValidation != ReservationDateTimeValidationResult.Valid)
             {
-                Console.WriteLine("Reservations can only be made for a date after today.");
+                Console.WriteLine(GetValidationMessage(dateValidation));
                 continue;
             }
 
-            if (_tableAccess.GetTablesForDate(reservationDate, NumberOfPeople).Count == 0)
-            {
-                Console.WriteLine("That date is fully booked. Please choose another date.");
-                continue;
-            }
             Console.Clear();
 
             break;
@@ -206,28 +233,84 @@ public class AddReservation
 
             if (DateTime.TryParseExact(input, "HH:mm", null, System.Globalization.DateTimeStyles.None, out reservationTime))
             {
-                break;
+                DateTime reservationDateTime = reservationDate.Date.Add(reservationTime.TimeOfDay);
+                DateTime currentTime = DateTime.Now;
+                ReservationDateTimeValidationResult validation =
+                    ReservationLogic.ValidateReservationDateTime(reservationDateTime, currentTime);
+                if (validation != ReservationDateTimeValidationResult.Valid)
+                {
+                    Console.WriteLine(GetValidationMessage(validation));
+                    continue;
+                }
+
+                if (ReservationLogic.NeedsShortNoticeConfirmation(reservationDateTime, currentTime)
+                    && !ConfirmShortNoticeReservation())
+                {
+                    return null;
+                }
+
+                Console.Clear();
+                return reservationDateTime;
             }
 
             Console.WriteLine("Invalid time format. Please enter the time in the format hh:mm:");
         }
-        Console.Clear();
-
-        return reservationDate.Date.Add(reservationTime.TimeOfDay);
     }
 
     public int AskTable(DateTime reservationDate)
     {
-        List<RestaurantTableModel> tables = _tableAccess.GetTablesForDate(reservationDate, NumberOfPeople);
+        List<RestaurantTableModel> tables = _tableAccess.GetTablesAvailableAt(reservationDate, NumberOfPeople);
         RestaurantTableModel? table = tables.FirstOrDefault();
         if (table is null)
         {
-            throw new InvalidOperationException("No available restaurant tables.");
+            throw new InvalidOperationException("Table is already booked at this time, please select a different time");
         }
 
         Console.WriteLine($"Table {table.TableId} has been assigned to your reservation.");
         Console.ReadLine();
         Console.Clear();
         return table.TableId;
+    }
+
+    private static string GetValidationMessage(ReservationDateTimeValidationResult validation)
+    {
+        if (validation == ReservationDateTimeValidationResult.BeforeCurrentDate)
+        {
+            return "Cannot put in a reservation before current date";
+        }
+
+        if (validation == ReservationDateTimeValidationResult.BeforeCurrentTime)
+        {
+            return "Cannot put in a reservation before current time";
+        }
+
+        if (validation == ReservationDateTimeValidationResult.AfterOneYear)
+        {
+            return "Cannot put in a reservation after 1 year";
+        }
+
+        return "Invalid reservation date or time";
+
+    }
+
+    private static bool ConfirmShortNoticeReservation()
+    {
+        Console.WriteLine("You have put in a reservation less than 48 before the reservation");
+        Console.WriteLine("if you want to cancel the reservation after confirming, a fine of 5 dollars has to be paid");
+
+        while (true)
+        {
+            Console.WriteLine("Confirm reservation Y/N");
+            string? response = Console.ReadLine();
+            if (response?.ToUpper() == "Y")
+            {
+                return true;
+            }
+
+            if (response?.ToUpper() == "N")
+            {
+                return false;
+            }
+        }
     }
 }
