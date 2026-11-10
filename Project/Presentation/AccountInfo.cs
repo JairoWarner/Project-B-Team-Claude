@@ -6,9 +6,9 @@ public class AccountInfo
     {
         Style.Title("Personal Menu");
         Console.WriteLine("1: Personal info");
-        Console.WriteLine("2: Change info");
-        Console.WriteLine("3: Past reservations");
-        Console.WriteLine("4: Past bills");
+        Console.WriteLine("2: Change personal info");
+        Console.WriteLine($"3: Past reservations {Style.Rood}(Under Construction){Style.Reset}");
+        Console.WriteLine($"4: Past bills {Style.Rood}(Under Construction){Style.Reset}");
         string choice = Console.ReadLine();
 
         if (choice == "1")
