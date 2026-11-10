@@ -38,7 +38,7 @@ public class CustomerMenu
                     break;
 
                 case "4":
-                    Console.WriteLine("Not implemented yet!");
+                    RestaurantMap.Start();
                     break;
 
                 case "5":
