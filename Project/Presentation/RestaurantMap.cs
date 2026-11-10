@@ -7,7 +7,7 @@ public static class RestaurantMap
         Style.Setup();
         Style.Title("Restaurant Map");
 
-        DateTime moment = new DateTime(2026, 11, 11, 21, 0, 0);
+        DateTime moment = DateTime.Now;
 
         List<RestaurantTableModel> tables = _tableLogic.GetAllTables();
         List<int> reservedIds = _reservationLogic.GetReservedTableIds(moment);
