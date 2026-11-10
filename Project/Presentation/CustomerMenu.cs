@@ -5,16 +5,16 @@ public class CustomerMenu
 {
     public static void Start()
     {
-        Style.Title("Welcome/欢迎");
         string menuChoice = "";
         while (menuChoice != "7")
         {
             Style.Setup();
+            Style.Logo();
             Style.Title("Homepage");
-            Style.Normal("1: My Details:");
-            Style.Normal("2: Make Reservation:");
-            Style.Normal("3: Show Reservations:");
-            Style.Normal("4: Restaurant Layout:");
+            Style.Normal("1: My Details");
+            Style.Normal("2: Make Reservation");
+            Style.Normal("3: Show Reservations");
+            Style.Normal("4: Restaurant Layout");
             Style.Normal("5: Food menu");
             Style.Normal("6: About Us");
             Style.Normal("7: Log out");

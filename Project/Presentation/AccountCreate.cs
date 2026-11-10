@@ -4,7 +4,7 @@ using System.Globalization;
 
 
 public static class AccountCreate
-{   
+{
     public static String FirstName = "";
     public static String LastName = "";
     public static String DateofBirth;
@@ -12,29 +12,13 @@ public static class AccountCreate
     public static String email = "";
     public static String Phonenumber = "";
     public static String password = "";
-    
+
 //====================================================================
     public static void Start()
     {
-        Console.Clear();
-
-        Style.Title("1: Login");
-        Style.Title("2: Register");
-
-        string? choice = Console.ReadLine();
-
-        if (choice == "1")
-        {
-            UserLogin.LoginStart();
-            return;
-        }
-
-        if (choice == "2")
-        {
-            Firstname();
-        }
+        Firstname();
     }
-    
+
 //====================================================================
     public static void Firstname()
     {
@@ -48,30 +32,36 @@ public static class AccountCreate
                 ShowFirstNameError();
                 continue;
             }
+
             break;
         }
+
         Style.Logo();
         Style.Success($"{FirstName} is correct toegevoegd!");
         Lastname();
     }
+
 //===================================================================
     public static void Lastname()
     {
-        Style.Title("Please enter your lastname"); 
+        Style.Title("Please enter your lastname");
         while (true)
         {
-            LastName = Console.ReadLine();  
+            LastName = Console.ReadLine();
             if (!AccountsLogic.ValidateLastName(LastName))
             {
-                ShowLastNameError();    
+                ShowLastNameError();
                 continue;
             }
+
             break;
         }
+
         Style.Logo();
         Style.Success($"{LastName} is correct toegevoegd!");
         Dateofbirth();
     }
+
 //================================================================
     public static void Dateofbirth()
     {
@@ -84,13 +74,16 @@ public static class AccountCreate
                 ShowDateError();
                 continue;
             }
-            Birthdate = DateTime.ParseExact(DateofBirth,"dd/mm/yyyy",CultureInfo.InvariantCulture);
+
+            Birthdate = DateTime.ParseExact(DateofBirth, "dd/mm/yyyy", CultureInfo.InvariantCulture);
             break;
         }
+
         Style.Logo();
         Style.Success($"{DateofBirth} is correct toegevoegd!");
         Emailaddress();
-}
+    }
+
 //===================================================================
     public static void Emailaddress()
     {
@@ -103,18 +96,22 @@ public static class AccountCreate
                 ShowEmailError();
                 continue;
             }
+
             if (AccountsLogic.EmailExists(email))
             {
                 Style.ErrorHeader();
                 Style.Error("an account with this email already exists");
                 continue;
             }
+
             break;
         }
+
         Style.Logo();
         Style.Success($"{email} is correct toegevoegd!");
         PhoneNumber();
     }
+
 //===================================================================
     public static void PhoneNumber()
     {
@@ -127,12 +124,15 @@ public static class AccountCreate
                 ShowPhoneNumberError();
                 continue;
             }
+
             break;
         }
+
         Style.Logo();
         Style.Success($"{Phonenumber} is correct toegevoegd!");
         Password();
     }
+
 //===================================================================
     public static void Password()
     {
@@ -156,6 +156,7 @@ public static class AccountCreate
                 Style.Title("Passwords do not match. Please try again.");
                 continue;
             }
+
             break;
         }
 
@@ -165,6 +166,7 @@ public static class AccountCreate
         AccountsLogic.CreateAccount(FirstName, LastName, email, password, Phonenumber, DateofBirth);
         UserLogin.LoginStart();
     }
+
 //===================================================================
     private static void ShowFirstNameError()
     {
@@ -176,6 +178,7 @@ public static class AccountCreate
         Style.Error("username should only contain letters");
         Style.Title("Please enter your First Name");
     }
+
     private static void ShowLastNameError()
     {
         Style.Logo();
@@ -183,9 +186,10 @@ public static class AccountCreate
         Style.Error("Last name is Required");
         Style.Error("Minimum length of Last name is 2 caracters");
         Style.Error("Maximum length of Last name is 16 caracters");
-        Style.Error("username should only contain letters");   
-        Style.Title("Please enter your Last Name");                 
+        Style.Error("username should only contain letters");
+        Style.Title("Please enter your Last Name");
     }
+
     private static void ShowDateError()
     {
         Style.Logo();
@@ -196,6 +200,7 @@ public static class AccountCreate
         Style.Error("Age should be between 16 and 130 years old");
         Style.Title("Please enter your Date of Birth as: (dd/MM/yyyy)");
     }
+
     private static void ShowEmailError()
     {
         Style.Logo();
@@ -205,8 +210,8 @@ public static class AccountCreate
         Style.Error("Email address needs at least 3 characters before @");
         Style.Error("Email address cannot contain spaces");
         Style.Title("Please enter your email address");
-
     }
+
     private static void ShowPhoneNumberError()
     {
         Style.Logo();
@@ -216,6 +221,7 @@ public static class AccountCreate
         Style.Error("Phone number Must contain 8 to 15 digits");
         Style.Title("Please enter your phone number");
     }
+
     private static void ShowPasswordError()
     {
         Style.Logo();
