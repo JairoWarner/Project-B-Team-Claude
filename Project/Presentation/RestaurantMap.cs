@@ -7,9 +7,33 @@ public static class RestaurantMap
         Style.Setup();
         Style.Title("Restaurant Map");
 
-        DateTime moment = DateTime.Now;
+        DrawMap(DateTime.Now);
 
-        List<RestaurantTableModel> tables = _tableLogic.GetAllTables();
+        Console.WriteLine("\nPress any key to go back...");
+        Console.ReadKey();
+    }
+
+    private static string GetColor(int tableId, List<int> reservedIds, List<int> userIds)
+    {
+        string color;
+
+        if (userIds.Contains(tableId))
+        {
+            color = Style.Goud;
+        }
+        else if (reservedIds.Contains(tableId))
+        {
+            color = Style.Rood;
+        }
+        else
+        {
+            color = Style.Groen;
+        }
+        return color;
+    }
+
+    public static void DrawMap(DateTime moment)
+    {
         List<int> reservedIds = _reservationLogic.GetReservedTableIds(moment);
         List<int> userIds = _reservationLogic.GetUserTable(moment, (int)AccountsLogic.CurrentAccount!.Id);
 
@@ -71,30 +95,10 @@ public static class RestaurantMap
 
         Console.WriteLine();
         Console.WriteLine("Legend:");
-        Console.WriteLine($"{Style.Groen}[  ]{Style.Reset} Free");
-        Console.WriteLine($"{Style.Rood}[  ]{Style.Reset} Reserved");
-        Console.WriteLine($"{Style.Goud}[  ]{Style.Reset} Your table");
-        Console.WriteLine("\nPress any key to go back...");
-        Console.ReadKey();
-    }
-
-    private static string GetColor(int tableId, List<int> reservedIds, List<int> userIds)
-    {
-        string color;
-
-        if (userIds.Contains(tableId))
-        {
-            color = Style.Goud;
-        }
-        else if (reservedIds.Contains(tableId))
-        {
-            color = Style.Rood;
-        }
-        else
-        {
-            color = Style.Groen;
-        }
-        return color;
+        Console.WriteLine($"{Style.Groen}[  ]{Style.Reset} Free          Tables 1-8:   2 seats");
+        Console.WriteLine($"{Style.Rood}[  ]{Style.Reset} Reserved      Tables 9-13:  4 seats");
+        Console.WriteLine($"{Style.Goud}[  ]{Style.Reset} Your table    Tables 14-15: 6 seats");
+        Console.WriteLine("                   Table 16:     8 seats");
     }
 
     private static void DrawTable(int tableId, List<int> reservedIds, List<int> userIds)

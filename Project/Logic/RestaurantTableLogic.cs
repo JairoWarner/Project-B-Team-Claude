@@ -6,4 +6,9 @@ public class RestaurantTableLogic
     {
         return _access.GetAllTables();
     }
+
+    public List<RestaurantTableModel> GetAvailableTables(DateTime moment, int numberOfPeople)
+    {
+        return _access.GetTablesAvailableAt(moment, numberOfPeople);
+    }
 }
