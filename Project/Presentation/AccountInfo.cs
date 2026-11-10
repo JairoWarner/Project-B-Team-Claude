@@ -6,7 +6,7 @@ public class AccountInfo
     {
         Style.Title("Personal Menu");
         Console.WriteLine("1: Personal info");
-        Console.WriteLine("2: Active reservations");
+        Console.WriteLine("2: Change info");
         Console.WriteLine("3: Past reservations");
         Console.WriteLine("4: Past bills");
         string choice = Console.ReadLine();
@@ -14,8 +14,8 @@ public class AccountInfo
         if (choice == "1")
             ShowAccountInfo(AccountsLogic.CurrentAccount);
         
-        // if (choice == "2")
-            
+        if (choice == "2")
+            ChangeInfo();
     }
     
     public void ShowAccountInfo(AccountModel account)
@@ -33,5 +33,43 @@ public class AccountInfo
         Console.WriteLine($"Phone number: {account.Phone}");
         Console.WriteLine($"\nPress Enter to continue");
         Console.ReadLine();
+    }
+
+    public void ChangeInfo()
+    {
+        Console.Clear();
+
+        string email = "";
+        string phoneNumber = "";
+
+        while (true)
+        {
+            Style.Normal("Enter new email address: ");
+            email = Console.ReadLine();
+
+            if (!AccountsLogic.CheckEmail(email))
+            {
+                Style.Error("Invalid email address");
+                continue;
+            }
+
+            break;
+        }
+        
+        while (true)
+        {
+            Style.Normal("Enter new phone number: ");
+            phoneNumber = Console.ReadLine();
+
+            if (!AccountsLogic.ValidatePhoneNumber(phoneNumber))
+            {
+                Style.Error("Invalid phone number");
+                continue;
+            }
+            
+            break;
+        }
+
+        AccountsLogic.UpdateInfo(email, phoneNumber);
     }
 }

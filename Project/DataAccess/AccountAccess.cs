@@ -30,6 +30,12 @@ public class AccountAccess
         string sql = $"INSERT INTO {Table} (fullname, email, password, phone, role, dateofbirth) VALUES (@FullName, @EmailAddress, @Password, @Phone, @Role, @DateOfBirth)";
         _connection.Execute(sql, account);
     }
+    
+    public void UpdateInfo(AccountModel account)
+    {
+        string sql = $"UPDATE {Table} SET email = @EmailAddress, phone = @Phone WHERE id = @Id";
+        _connection.Execute(sql, account);
+    }
 
     public AccountModel GetByEmail(string email)
     {

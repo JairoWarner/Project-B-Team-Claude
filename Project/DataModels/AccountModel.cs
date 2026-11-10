@@ -20,5 +20,11 @@
         Role = role;
         DateOfBirth = dateofbirth;
     }
+
+    public AccountModel(string email, string phone)
+    {
+        EmailAddress = email;
+        Phone = phone;
+    }
 }
 

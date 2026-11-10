@@ -79,8 +79,9 @@ static class UserLogin
                     
                     return;
                 }
-
-                Style.Error("Incorrect password");
+                
+                Console.Clear();
+                Style.Error("Email or password is wrong");
             }
         }
     }

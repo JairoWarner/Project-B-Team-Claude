@@ -1,22 +1,17 @@
 ﻿namespace UnitTests;
 
-
-
 [TestClass]
 public sealed class Test1
 {
-
-
     [DataTestMethod]
     [DataRow("kevin@kevin.nl", "kevin")]
     public void LoginValidCredentials(string m, string p)
     {
         // arrange
-        AccountsLogic l = new();
         AccountAccess access = new();
 
         // act 
-        AccountModel result = l.CheckLogin(m, p);
+        AccountModel result = AccountsLogic.CheckLogin(m, p);
 
         // assert
         Assert.IsNotNull(result);
@@ -33,10 +28,9 @@ public sealed class Test1
     public void LoginInvalidCredentials(string m, string p)
     {
         // arrange
-        AccountsLogic l = new();
 
         // act 
-        AccountModel result = l.CheckLogin(m, p);
+        AccountModel result = AccountsLogic.CheckLogin(m, p);
 
         // assert
         Assert.IsNull(result);

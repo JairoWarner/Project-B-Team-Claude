@@ -232,4 +232,15 @@ public class AccountsLogic
             return string.Equals(password, storedHash, StringComparison.Ordinal);
         }
     }
+    
+    public static void UpdateInfo(string email, string phonenumber)
+    {
+        if (CurrentAccount == null)
+            return;
+
+        CurrentAccount.EmailAddress = email;
+        CurrentAccount.Phone = phonenumber;
+
+        _access.UpdateInfo(CurrentAccount);
+    }
 }
