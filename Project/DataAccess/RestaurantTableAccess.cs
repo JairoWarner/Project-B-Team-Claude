@@ -6,6 +6,11 @@ public class RestaurantTableAccess
     private readonly SqliteConnection _connection = new("Data Source=DataSources/project.db");
     private const string Table = "RestaurantTable";
 
+    public List<RestaurantTableModel> GetAllTables()
+    {
+        string sql = $"SELECT ID as TableId, Available, Seats FROM {Table} ORDER BY TableId";
+        return _connection.Query<RestaurantTableModel>(sql).ToList();
+    }
     // Retrieves active tables with enough seats for the party.
     public List<RestaurantTableModel> GetTablesForDate(DateTime reservationDate, int numberOfPeople)
     {

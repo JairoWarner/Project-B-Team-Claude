@@ -65,6 +65,34 @@ public class ReservationAccess
         }).ToList();
     }
 
+    public List<int> GetReservedTableIds(DateTime moment)
+    {
+        string sql = $@"SELECT TableID FROM {Table}
+                       WHERE Date || ' ' || Time > @EarliestTime
+                       AND Date || ' ' || Time < @LatestTime";
+        
+        return _connection.Query<int>(sql, new
+        {
+            EarliestTime = moment.AddHours(-2).ToString("yyyy-MM-dd HH:mm"),
+            LatestTime = moment.AddHours(2).ToString("yyyy-MM-dd HH:mm")
+        }).ToList();
+    }
+
+    public List<int> GetUserTable(DateTime moment, int userId)
+    {
+        string sql = $@"SELECT TableID FROM {Table}
+                       WHERE Date || ' ' || Time > @EarliestTime
+                       AND Date || ' ' || Time < @LatestTime
+                       AND UserID = @UserID";
+
+        return _connection.Query<int>(sql, new
+        {
+            EarliestTime = moment.AddHours(-2).ToString("yyyy-MM-dd HH:mm"),
+            LatestTime = moment.AddHours(2).ToString("yyyy-MM-dd HH:mm"),
+            UserID = userId
+        }).ToList();
+    }
+
     private sealed class ReservationRow
     {
         public int Id { get; set; }

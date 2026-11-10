@@ -88,4 +88,14 @@ public class ReservationLogic
         return _access.GetAll();
     }
 
+    public List<int> GetReservedTableIds(DateTime moment)
+    {
+        return _access.GetReservedTableIds(moment);
+    }
+
+    public List<int> GetUserTable(DateTime moment, int userId)
+    {
+        return _access.GetUserTable(moment, userId);
+    }
+
 }
