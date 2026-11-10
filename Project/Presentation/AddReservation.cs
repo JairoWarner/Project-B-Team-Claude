@@ -2,6 +2,7 @@ using System;
 
 public class AddReservation
 {
+    private readonly RestaurantTableLogic _tableLogic = new();
     private readonly ReservationLogic _logic = new();
 
     public int NumberOfPeople { get; private set; } = 1;
@@ -193,12 +194,42 @@ public class AddReservation
 
     public int AskTable(DateTime reservationDate)
     {
-        int selectedTableId = _logic.GetAvailableTableId(reservationDate, NumberOfPeople);
+        List<RestaurantTableModel> availableTables = _tableLogic.GetAvailableTables(reservationDate, NumberOfPeople);
 
-        Console.WriteLine($"Table {selectedTableId} has been assigned to your reservation.");
-        Console.ReadLine();
-        Console.Clear();
-        return selectedTableId;
+        while (true)
+        {
+            Console.Clear();
+            RestaurantMap.DrawMap(reservationDate);
+
+            Console.WriteLine("\nWhich table would you like?");
+            string? input = Console.ReadLine();
+
+            if (!int.TryParse(input, out int choice))
+            {
+                Console.WriteLine("Please enter a table number.");
+                Console.ReadKey();
+                continue;
+            }
+
+            // Check of choice in availableTables zit
+            bool found = false;
+            foreach (RestaurantTableModel table in availableTables)
+            {
+                if (table.TableId == choice)
+                {
+                    found = true;
+                }
+            }
+
+            if (found)
+            {
+                Console.Clear();
+                return choice;
+            }
+
+            Console.WriteLine("This table is not available or does not have enough seats.");
+            Console.ReadKey();
+        }
     }
 
     private static string GetValidationMessage(ReservationDateTimeValidationResult validation)
