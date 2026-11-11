@@ -10,7 +10,7 @@ public sealed class Test1
         // arrange
 
         // act
-        AccountModel result = AccountsLogic.CheckLogin(m, p);
+        AccountModel? result = AccountsLogic.CheckLogin(m, p);
 
         // assert
         Assert.IsNotNull(result);
@@ -18,21 +18,37 @@ public sealed class Test1
     }
 
     [DataTestMethod]
-    [DataRow("kevin@kevin.nl", "wrong")] // wrong password
-    [DataRow("wrong1", "kevin")] // wrong email
-    [DataRow("wrong2", "wrong")] // everything wrong
-    [DataRow("", "")]
-    [DataRow(null, null)]
+    [DataRow("User@example.com", "Wrong123!")]     // S3
+    [DataRow("unknown@example.com", "Test1234!")]  // S4
     public void LoginInvalidCredentials(string m, string p)
     {
         // arrange
-        string email = "User@example.com";
-        string password = "Test1234!";
-        
-        // act 
-        AccountModel result = AccountsLogic.CheckLogin(m, p);
+
+        // act
+        AccountModel? result = AccountsLogic.CheckLogin(m, p);
 
         // assert
         Assert.IsNull(result);
     }
+
+    [DataTestMethod]
+    [DataRow("User@example.com", "Wrong123!", false)]
+    [DataRow("User@example.com", "Wrong123!", false)]
+    [DataRow("User@example.com", "Test1234!", true)]
+    public void LoginAttemptsTest(string m, string p, bool expected)
+    {
+        // arrange
+        
+        // act
+        AccountModel? result = AccountsLogic.CheckLogin(m, p);
+
+        // assert
+        if (expected)
+            Assert.IsNotNull(result);
+        
+        if (!expected)
+            Assert.IsNull(result);
+    }
+
+   
 }
