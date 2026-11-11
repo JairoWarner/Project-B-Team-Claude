@@ -267,7 +267,7 @@ public class AddReservation
     private static bool ConfirmShortNoticeReservation()
     {
         Console.WriteLine("You have put in a reservation less than 48 before the reservation");
-        Console.WriteLine("if you want to cancel the reservation after confirming, a fine of 5 dollars has to be paid");
+        Console.WriteLine("if you want to cancel the reservation after confirming, a fine of 30 dollars has to be paid");
 
         while (true)
         {

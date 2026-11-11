@@ -16,7 +16,7 @@ public class OrderLogic
 
     public static int CalculateAge(string dateOfBirth)
     {
-        DateTime birthdate = DateTime.ParseExact(dateOfBirth, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+        DateTime birthdate = DateTime.ParseExact(dateOfBirth, "dd/mm/yyyy", System.Globalization.CultureInfo.InvariantCulture);
         int age = DateTime.Today.Year - birthdate.Year;
 
         if (birthdate > DateTime.Today.AddYears(-age))

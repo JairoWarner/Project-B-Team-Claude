@@ -123,7 +123,7 @@ public class AccountsLogic
     public static bool ValidateDateofBirth(string DateofBirth)
     {
         if (!DateTime.TryParseExact(DateofBirth,
-                "dd/MM/yyyy", CultureInfo.InvariantCulture,
+                "dd/mm/yyyy", CultureInfo.InvariantCulture,
                 DateTimeStyles.None, out DateTime birthdate))
         {
             return false;

@@ -9,12 +9,12 @@ static class UserLogin
             Console.Clear();
             Style.Title("Welcome to the login page");
             
-            Style.Normal("1: to create an account");
-            Style.Normal("2: to Log in");
-            Style.Normal("3: to exit the program");
+            Style.Normal("1: Login");
+            Style.Normal("2: Register");
+            Style.Normal("3: Go back");
             string choice = Console.ReadLine();
 
-            if  (choice == "1")
+            if  (choice == "2")
                 AccountCreate.Start();
             
             if (choice == "3")

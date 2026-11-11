@@ -37,7 +37,6 @@ public static class AccountCreate
         }
 
         Style.Logo();
-        Style.Success($"{FirstName} is correct toegevoegd!");
         Lastname();
     }
 
@@ -58,14 +57,13 @@ public static class AccountCreate
         }
 
         Style.Logo();
-        Style.Success($"{LastName} is correct toegevoegd!");
         Dateofbirth();
     }
 
 //================================================================
     public static void Dateofbirth()
     {
-        Style.Title("Please enter your Date of Birth as: (dd/MM/yyyy)");
+        Style.Title("Please enter your Date of Birth as: (dd/mm/yyyy)");
         while (true)
         {
             DateofBirth = Console.ReadLine() ?? "";
@@ -80,7 +78,6 @@ public static class AccountCreate
         }
 
         Style.Logo();
-        Style.Success($"{DateofBirth} is correct toegevoegd!");
         Emailaddress();
     }
 
@@ -108,7 +105,6 @@ public static class AccountCreate
         }
 
         Style.Logo();
-        Style.Success($"{email} is correct toegevoegd!");
         PhoneNumber();
     }
 
@@ -129,7 +125,6 @@ public static class AccountCreate
         }
 
         Style.Logo();
-        Style.Success($"{Phonenumber} is correct toegevoegd!");
         Password();
     }
 
@@ -161,7 +156,6 @@ public static class AccountCreate
         }
 
         Style.Logo();
-        Style.Success("Password is successfully added!");
 
         AccountsLogic.CreateAccount(FirstName, LastName, email, password, Phonenumber, DateofBirth);
         UserLogin.LoginStart();
@@ -195,10 +189,10 @@ public static class AccountCreate
         Style.Logo();
         Style.ErrorHeader();
         Style.Error("Date is Required");
-        Style.Error("Format should be formatted dd/MM/yyyy");
+        Style.Error("Format should be formatted dd/mm/yyyy");
         Style.Error("Birth date should be valid");
         Style.Error("Age should be between 16 and 130 years old");
-        Style.Title("Please enter your Date of Birth as: (dd/MM/yyyy)");
+        Style.Title("Please enter your Date of Birth as: (dd/mm/yyyy)");
     }
 
     private static void ShowEmailError()
