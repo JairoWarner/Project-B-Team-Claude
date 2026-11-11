@@ -30,11 +30,16 @@ public class AddReservation
             return;
         }
 
+        int? selectedTableId = AskTable(reservationDate.Value);
+        if (selectedTableId is null)
+        {
+            return;
+        }
+
         orderFood.PlaceOrder(acc);
 
         try
         {
-            int selectedTableId = AskTable(reservationDate.Value);
             _logic.AddReservation(new ReservationModel
             {
                 UserID = acc.Id,
@@ -42,7 +47,7 @@ public class AddReservation
                 NumberOfChildren = NumberOfChildren,
                 ReservationDate = reservationDate.Value.Date,
                 ReservationTime = reservationDate.Value,
-                SelectedTableId = selectedTableId
+                SelectedTableId = selectedTableId.Value
             });
 
             Console.WriteLine("Reservation added successfully!");
@@ -192,9 +197,16 @@ public class AddReservation
         }
     }
 
-    public int AskTable(DateTime reservationDate)
+    public int? AskTable(DateTime reservationDate)
     {
         List<RestaurantTableModel> availableTables = _tableLogic.GetAvailableTables(reservationDate, NumberOfPeople);
+        if (availableTables.Count == 0)
+        {
+            Console.WriteLine($"There are no available tables for {NumberOfPeople} people at the selected time.");
+            Console.WriteLine("Press Enter to return to the main menu.");
+            Console.ReadLine();
+            return null;
+        }
 
         while (true)
         {
