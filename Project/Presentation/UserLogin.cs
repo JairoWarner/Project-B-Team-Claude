@@ -1,3 +1,5 @@
+using Project.DataModels;
+
 static class UserLogin
 {
     public static void LoginStart()
@@ -71,11 +73,10 @@ static class UserLogin
                     Style.Normal($"\nPress {Style.Groen}ENTER{Style.Reset} to open the menu");
                     Console.ReadLine();
                     
-                    if (acc.Role == "Customer")
+                    if (acc.Role == CustomerRole.Customer)
                         CustomerMenu.Start();
-                    
-                    if (acc.Role == "Admin")
-                        Console.WriteLine("No admin menu yet. Womp Womp");
+                    else if (acc.Role == CustomerRole.Admin)
+                        AdminMenu.Start();
                     
                     return;
                 }
