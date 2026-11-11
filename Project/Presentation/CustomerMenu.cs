@@ -5,52 +5,56 @@ public class CustomerMenu
 {
     public static void Start()
     {
-        string menuChoice = "";
-        while (menuChoice != "7")
+        string[] Menu =
+        [
+            "1: My Details",
+            "2: Make Reservation",
+            "3: Show Reservations",
+            "4: Restaurant Layout",
+            "5: Food menu",
+            "6: About Us",
+            "7: Log out"
+        ];
+        
+        while (true)
         {
             Style.Setup();
             Style.Logo();
             Style.Title("Homepage");
-            Style.Normal("1: My Details");
-            Style.Normal("2: Make Reservation");
-            Style.Normal("3: Show Reservations");
-            Style.Normal("4: Restaurant Layout");
-            Style.Normal("5: Food menu");
-            Style.Normal("6: About Us");
-            Style.Normal("7: Log out");
-            menuChoice = Console.ReadLine();
             
-            switch (menuChoice)
+            int choice = ArrowNavigation.PrintMenu(Menu);
+            
+            switch (choice)
             {
-                case "1":
+                case 1:
                     AccountInfo accountInfo = new();
                     accountInfo.PersonalMenu();
                     break;
 
-                case "2":
+                case 2:
                     AddReservation addReservation = new();
                     addReservation.start();
                     break;
 
-                case "3":
+                case 3:
                     ShowReservation showReservations = new();
                     showReservations.ShowReservations();
                     break;
 
-                case "4":
+                case 4:
                     RestaurantMap.Start();
                     break;
 
-                case "5":
+                case 5:
                     FoodMenu menu = new();
                     menu.ChooseMenu();
                     break;
 
-                case "6":
+                case 6:
                     RestaurantInfo.PrintInfo();
                     break;
 
-                case "7":
+                case 7:
                     Console.Clear();
                     Console.WriteLine("You have been logged out");
                     UserLogin.LoginStart();
