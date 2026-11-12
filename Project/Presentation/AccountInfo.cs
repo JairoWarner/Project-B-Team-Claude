@@ -1,23 +1,37 @@
 ﻿namespace Project.Presentation;
 
 public class AccountInfo
-{ 
+{
     public void PersonalMenu()
     {
-        Style.Title("Personal Menu");
-        Console.WriteLine("1: Personal info");
-        Console.WriteLine("2: Change personal info");
-        Console.WriteLine($"3: Past reservations {Style.Rood}(Under Construction){Style.Reset}");
-        Console.WriteLine($"4: Past bills {Style.Rood}(Under Construction){Style.Reset}");
-        string choice = Console.ReadLine();
+        string[] Menu =
+        [
+            "1: Personal info",
+            "2: Change personal info",
+            $"3: Past reservations {Style.Rood}(Under Construction){Style.Reset}",
+            $"4: Past bills {Style.Rood}(Under Construction){Style.Reset}"
+        ];
 
-        if (choice == "1")
-            ShowAccountInfo(AccountsLogic.CurrentAccount);
-        
-        if (choice == "2")
-            ChangeInfo();
+        int MenuChoice = 0;
+
+        while (true)
+        {
+            MenuChoice = ArrowNavigation.ReadArray(Menu);
+
+            Style.Title("Personal Menu");
+
+            switch (MenuChoice)
+            {
+                case 1:
+                    ShowAccountInfo(AccountsLogic.CurrentAccount);
+                    break;
+                case 2:
+                    ChangeInfo();
+                    break;
+            }
+        }
     }
-    
+
     public void ShowAccountInfo(AccountModel account)
     {
         if (account == null)
@@ -25,14 +39,35 @@ public class AccountInfo
             Console.WriteLine("Account not found");
             return;
         }
+
+        string[][] PersonalInfo = new string[5][];
         
-        Console.Clear();
-        Console.WriteLine($"Name: {account.FullName}");
-        Console.WriteLine($"Date of birth: {account.DateOfBirth}");
-        Console.WriteLine($"Email: {account.EmailAddress}");
-        Console.WriteLine($"Phone number: {account.Phone}");
-        Console.WriteLine($"\nPress Enter to continue");
-        Console.ReadLine();
+        PersonalInfo[0] = new string[] {$"Name: {account.FullName}", "Edit Name"};
+        PersonalInfo[0] = new string[] {$"Date of birth: {account.DateOfBirth}", "Edit Date of birth"};
+        PersonalInfo[0] = new string[] {$"Email: {account.EmailAddress}", "Edit Email"};
+        PersonalInfo[0] = new string[] {$"Phone number: {account.Phone}", "Edit Phone Number"};
+        PersonalInfo[0] = new string[] {"Go back"};
+
+        int InfoChoice = 0;
+        
+        while (true)
+        {
+            ArrowNavigation.ReadArray(PersonalInfo);
+
+            switch (InfoChoice)
+            {
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    break;
+            }
+        }
     }
 
     public void ChangeInfo()
@@ -55,7 +90,7 @@ public class AccountInfo
 
             break;
         }
-        
+
         while (true)
         {
             Style.Normal("Enter new phone number: ");
@@ -66,7 +101,7 @@ public class AccountInfo
                 Style.Error("Invalid phone number");
                 continue;
             }
-            
+
             break;
         }
 

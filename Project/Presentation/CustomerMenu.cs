@@ -22,7 +22,7 @@ public class CustomerMenu
             Style.Logo();
             Style.Title("Homepage");
             
-            int choice = ArrowNavigation.PrintMenu(Menu);
+            int choice = ArrowNavigation.ReadArray(Menu);
             
             switch (choice)
             {

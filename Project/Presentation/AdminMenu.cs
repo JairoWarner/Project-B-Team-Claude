@@ -4,8 +4,20 @@ public class AdminMenu
 {
     public static void Start()
     {
-        string menuChoice = "";
-        while (menuChoice != "8")
+        string[] Menu =
+        [
+            "1: My Details",
+            "2: Make Reservation",
+            "3: Show Reservations",
+            "4: Restaurant Layout",
+            "5: Food menu",
+            "6: About Us",
+            $"7: Manage Reservations {Style.Rood}(Under Construction){Style.Reset}",
+            "8: Log out"
+        ];
+
+        int menuChoice = 0;
+        while (menuChoice != 8)
         {
             Style.Setup();
             Console.ForegroundColor = ConsoleColor.Cyan;
@@ -16,53 +28,45 @@ public class AdminMenu
             Console.ResetColor();
             Console.WriteLine("Welcome to the Admin Homepage");
             Style.Title("Admin Homepage");
-            Style.Normal("1: My Details");
-            Style.Normal("2: Make Reservation");
-            Style.Normal("3: Show Reservations");
-            Style.Normal("4: Restaurant Layout");
-            Style.Normal("5: Food menu");
-            Style.Normal("6: About Us");
-            Style.Normal($"7: Manage Reservations {Style.Rood}(Under Construction){Style.Reset}");
-            Style.Normal("8: Log out");
-            menuChoice = Console.ReadLine();
-
+            menuChoice = ArrowNavigation.ReadArray(Menu);
+            
             switch (menuChoice)
             {
-                case "1":
+                case 1:
                     AccountInfo accountInfo = new();
                     accountInfo.PersonalMenu();
                     break;
 
-                case "2":
+                case 2:
                     AddReservation addReservation = new();
                     addReservation.start();
                     break;
 
-                case "3":
+                case 3:
                     ShowReservation showReservations = new();
                     showReservations.ShowReservations();
                     break;
 
-                case "4":
+                case 4:
                     RestaurantMap.Start();
                     break;
 
-                case "5":
+                case 5:
                     FoodMenu menu = new();
                     menu.ChooseMenu();
                     break;
 
-                case "6":
+                case 6:
                     RestaurantInfo.PrintInfo();
                     break;
 
-                case "7":
+                case 7:
                     Style.Normal("Manage Reservations is under construction.");
                     Style.Normal("Press any key to continue..");
                     Console.ReadKey();
                     break;
 
-                case "8":
+                case 8:
                     Console.Clear();
                     Console.WriteLine("You have been logged out");
                     UserLogin.LoginStart();
