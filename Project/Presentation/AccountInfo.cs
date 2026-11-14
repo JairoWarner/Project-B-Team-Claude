@@ -42,17 +42,17 @@ public class AccountInfo
 
         string[][] PersonalInfo = new string[5][];
         
-        PersonalInfo[1] = new string[] {$"Name: {account.FullName}", "Edit Name"};
-        PersonalInfo[2] = new string[] {$"Date of birth: {account.DateOfBirth}", "Edit Date of birth"};
-        PersonalInfo[3] = new string[] {$"Email: {account.EmailAddress}", "Edit Email"};
-        PersonalInfo[4] = new string[] {$"Phone number: {account.Phone}", "Edit Phone Number"};
-        PersonalInfo[5] = new string[] {"Go back"};
+        PersonalInfo[0] = new string[] {$"Name: {account.FullName}", "Edit Name", "Back"};
+        PersonalInfo[1] = new string[] {$"Date of birth: {account.DateOfBirth}", "Edit Date of birth", "Back"};
+        PersonalInfo[2] = new string[] {$"Email: {account.EmailAddress}", "Edit Email", "Back"};
+        PersonalInfo[3] = new string[] {$"Phone number: {account.Phone}", "Edit Phone Number", "Back"};
+        PersonalInfo[4] = new string[] {"Go back"};
 
         int InfoChoice = 0;
         
         while (true)
         {
-            ArrowNavigation.ReadArray(PersonalInfo);
+            InfoChoice = ArrowNavigation.ReadArray(PersonalInfo);
 
             switch (InfoChoice)
             {
