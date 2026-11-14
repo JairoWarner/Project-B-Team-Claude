@@ -1,4 +1,4 @@
-class ShowReservation
+public class ShowReservation
 {
     public void ShowReservations()
     {

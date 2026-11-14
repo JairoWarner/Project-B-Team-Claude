@@ -42,11 +42,11 @@ public class AccountInfo
 
         string[][] PersonalInfo = new string[5][];
         
-        PersonalInfo[0] = new string[] {$"Name: {account.FullName}", "Edit Name"};
-        PersonalInfo[0] = new string[] {$"Date of birth: {account.DateOfBirth}", "Edit Date of birth"};
-        PersonalInfo[0] = new string[] {$"Email: {account.EmailAddress}", "Edit Email"};
-        PersonalInfo[0] = new string[] {$"Phone number: {account.Phone}", "Edit Phone Number"};
-        PersonalInfo[0] = new string[] {"Go back"};
+        PersonalInfo[1] = new string[] {$"Name: {account.FullName}", "Edit Name"};
+        PersonalInfo[2] = new string[] {$"Date of birth: {account.DateOfBirth}", "Edit Date of birth"};
+        PersonalInfo[3] = new string[] {$"Email: {account.EmailAddress}", "Edit Email"};
+        PersonalInfo[4] = new string[] {$"Phone number: {account.Phone}", "Edit Phone Number"};
+        PersonalInfo[5] = new string[] {"Go back"};
 
         int InfoChoice = 0;
         
