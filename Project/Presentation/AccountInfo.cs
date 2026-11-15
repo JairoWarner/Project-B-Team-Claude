@@ -7,16 +7,16 @@ public class AccountInfo
         string[] Menu =
         [
             "1: Personal info",
-            "2: Change personal info",
-            $"3: Past reservations {Style.Rood}(Under Construction){Style.Reset}",
-            $"4: Past bills {Style.Rood}(Under Construction){Style.Reset}"
+            $"2: Past reservations {Style.Rood}(Under Construction){Style.Reset}",
+            $"3: Past bills {Style.Rood}(Under Construction){Style.Reset}",
+            "Go back"
         ];
 
         int MenuChoice = 0;
 
         while (true)
         {
-            MenuChoice = ArrowNavigation.ReadArray(Menu);
+            MenuChoice = ArrowNavigation.PrintMenu(Menu);
 
             Style.Title("Personal Menu");
 
@@ -26,7 +26,14 @@ public class AccountInfo
                     ShowAccountInfo(AccountsLogic.CurrentAccount);
                     break;
                 case 2:
-                    ChangeInfo();
+                    Style.Error("Not implemented yet");
+                    break;
+                case 3:
+                    Style.Error("Not implemented yet");
+                    break;
+                case 4:
+                    Console.Clear();
+                    CustomerMenu.Start();
                     break;
             }
         }
@@ -48,29 +55,34 @@ public class AccountInfo
         PersonalInfo[3] = new string[] {$"Phone number: {account.Phone}", "Edit Phone Number", "Back"};
         PersonalInfo[4] = new string[] {"Go back"};
 
-        int InfoChoice = 0;
+        (int, int) InfoChoice = (0, 0);
         
         while (true)
         {
-            InfoChoice = ArrowNavigation.ReadArray(PersonalInfo);
+            InfoChoice = ArrowNavigation.PrintJaggedMenu(PersonalInfo);
 
             switch (InfoChoice)
             {
-                case 1:
+                case (1, 1):
+                    ChangeName();
                     break;
-                case 2:
+                case (2, 1):
+                    ChangeDateOfBirth();
                     break;
-                case 3:
+                case (3, 1):
+                    ChangeEmail();
                     break;
-                case 4:
+                case (4, 1):
+                    ChangePhone();
                     break;
-                case 5:
+                case (5, 1):
+                    PersonalMenu();
                     break;
             }
         }
     }
 
-    public void ChangeInfo()
+    public void ChangeEmail()
     {
         Console.Clear();
 
@@ -87,24 +99,79 @@ public class AccountInfo
                 Style.Error("Invalid email address");
                 continue;
             }
-
+            
             break;
         }
 
+        AccountsLogic.UpdateEmail(email);
+    }
+    
+    public void ChangeName()
+    {
+        Console.Clear();
+
+        string name = "";
+
         while (true)
         {
-            Style.Normal("Enter new phone number: ");
-            phoneNumber = Console.ReadLine();
+            Style.Normal("Enter new name: ");
+            name = Console.ReadLine();
 
-            if (!AccountsLogic.ValidatePhoneNumber(phoneNumber))
+            if (!AccountsLogic.ValidateFirstName(name))
             {
-                Style.Error("Invalid phone number");
+                Style.Error("Invalid name");
                 continue;
             }
 
             break;
         }
 
-        AccountsLogic.UpdateInfo(email, phoneNumber);
+        AccountsLogic.UpdateName(name);
+    }
+    
+    public void ChangePhone()
+    {
+        Console.Clear();
+
+        string phone = "";
+
+        while (true)
+        {
+            Style.Normal("Enter new phone number: ");
+            phone = Console.ReadLine();
+
+            if (!AccountsLogic.ValidatePhoneNumber(phone))
+            {
+                Style.Error("Invalid number");
+                continue;
+            }
+
+            break;
+        }
+
+        AccountsLogic.UpdatePhone(phone);
+    }
+    
+    public void ChangeDateOfBirth()
+    {
+        Console.Clear();
+
+        string dateOfBirth = "";
+
+        while (true)
+        {
+            Style.Normal("Enter new date of birth: ");
+            dateOfBirth = Console.ReadLine();
+
+            if (!AccountsLogic.ValidateDateofBirth(dateOfBirth))
+            {
+                Style.Error("Invalid date Of Birth");
+                continue;
+            }
+
+            break;
+        }
+
+        AccountsLogic.UpdateDateOfBirth(dateOfBirth);
     }
 }

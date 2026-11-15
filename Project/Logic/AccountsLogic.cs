@@ -232,13 +232,54 @@ public class AccountsLogic
         }
     }
     
-    public static void UpdateInfo(string email, string phonenumber)
+    public static void UpdateEmail(string email)
     {
         if (CurrentAccount == null)
             return;
 
+        CurrentAccount.FullName = CurrentAccount.FullName;
         CurrentAccount.EmailAddress = email;
-        CurrentAccount.Phone = phonenumber;
+        CurrentAccount.Phone = CurrentAccount.Phone;
+        CurrentAccount.DateOfBirth = CurrentAccount.DateOfBirth;
+
+        _access.UpdateInfo(CurrentAccount);
+    }
+    
+    public static void UpdateName(string name)
+    {
+        if (CurrentAccount == null)
+            return;
+
+        CurrentAccount.FullName = name;
+        CurrentAccount.EmailAddress = CurrentAccount.EmailAddress;
+        CurrentAccount.Phone = CurrentAccount.Phone;
+        CurrentAccount.DateOfBirth = CurrentAccount.DateOfBirth;
+
+        _access.UpdateInfo(CurrentAccount);
+    }
+    
+    public static void UpdatePhone(string phone)
+    {
+        if (CurrentAccount == null)
+            return;
+
+        CurrentAccount.FullName = CurrentAccount.FullName;
+        CurrentAccount.EmailAddress = CurrentAccount.EmailAddress;
+        CurrentAccount.Phone = phone;
+        CurrentAccount.DateOfBirth = CurrentAccount.DateOfBirth;
+
+        _access.UpdateInfo(CurrentAccount);
+    }
+    
+    public static void UpdateDateOfBirth(string dateOfBirth)
+    {
+        if (CurrentAccount == null)
+            return;
+
+        CurrentAccount.FullName = CurrentAccount.FullName;
+        CurrentAccount.EmailAddress = CurrentAccount.EmailAddress;
+        CurrentAccount.Phone = CurrentAccount.Phone;
+        CurrentAccount.DateOfBirth = dateOfBirth;
 
         _access.UpdateInfo(CurrentAccount);
     }

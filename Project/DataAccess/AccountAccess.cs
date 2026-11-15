@@ -32,7 +32,7 @@ public class AccountAccess
     
     public void UpdateInfo(AccountModel account)
     {
-        string sql = $"UPDATE {Table} SET email = @EmailAddress, phone = @Phone WHERE id = @Id";
+        string sql = $"UPDATE {Table} SET fullname = @FullName, email = @EmailAddress, phone = @Phone, dateofbirth = @DateOfBirth WHERE id = @Id";
         _connection.Execute(sql, account);
     }
 

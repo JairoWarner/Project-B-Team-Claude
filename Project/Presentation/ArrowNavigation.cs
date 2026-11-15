@@ -2,6 +2,8 @@
 
 public static class ArrowNavigation
 {
+    public static string CurrentChoice { get; set; }
+    
     public static int PrintMenu(string[] menu)
     {
         int choice = 0;
@@ -39,22 +41,22 @@ public static class ArrowNavigation
         }
     }
 
-    public static int ReadArray(Array array)
-    {
-        if (array is string[] normalArray)
-        {
-            return PrintMenu(normalArray);
-        }
+    // public static int ReadArray(Array array)
+    // {
+    //     if (array is string[] normalArray)
+    //     {
+    //         return PrintMenu(normalArray);
+    //     }
+    //
+    //     if (array is string[][] jaggedArray)
+    //     {
+    //         return PrintJaggedMenu(jaggedArray);
+    //     }
+    //
+    //     return 0;
+    // }
 
-        if (array is string[][] jaggedArray)
-        {
-            return PrintJaggedMenu(jaggedArray);
-        }
-
-        return 0;
-    }
-
-    public static int PrintJaggedMenu(string[][] menu)
+    public static (int, int) PrintJaggedMenu(string[][] menu)
     {
         int choice = 0;
         int index = 1;
@@ -82,11 +84,11 @@ public static class ArrowNavigation
                     {
                         if (drop == true && index == i2)
                         {
-                            Style.Normal($"  > {Style.Groen}{menu[i][i2]}{Style.Reset}");
+                            Style.Normal($"> {Style.Groen}{menu[i][i2]}{Style.Reset}");
                         }
                         else
                         {
-                            Style.Normal($"    {menu[i][i2]}");
+                            Style.Normal($"     {menu[i][i2]}");
                         }
                     }
                 }
@@ -116,9 +118,7 @@ public static class ArrowNavigation
                         index = 1;
                     }
                     else
-                    {
-                        return choice + 1;
-                    }
+                        return (choice + 1, index);
                 }
             }
             else
@@ -136,8 +136,8 @@ public static class ArrowNavigation
                     index = 1;
 
                 if (InputKey.Key == ConsoleKey.Enter)
-                    return choice + 1;
-
+                    return (choice + 1, index);
+                
                 if (InputKey.Key == ConsoleKey.Escape)
                     drop = false;
             }

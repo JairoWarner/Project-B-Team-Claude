@@ -21,10 +21,12 @@
         DateOfBirth = dateofbirth;
     }
 
-    public AccountModel(string email, string phone)
+    public AccountModel(string fullName, string email, string phone, string dateOfBirth)
     {
+        FullName = fullName;
         EmailAddress = email;
         Phone = phone;
+        DateOfBirth = dateOfBirth;
     }
 }
 

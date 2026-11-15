@@ -1,3 +1,5 @@
+using Project.Presentation;
+
 public class ShowReservation
 {
     public void ShowReservations()
@@ -15,26 +17,51 @@ public class ShowReservation
         int displayedReservations = 0;
 
         Console.WriteLine("Reservations:");
-        foreach (ReservationModel reservation in reservations)
-        {
-            if (reservation.UserID != currentAccount.Id)
-            {
-                continue;
-            }
 
-            Console.WriteLine();
-            Console.WriteLine(
-                $"User: {reservation.UserID}| " +
-                $"Reservation {reservation.Id}: {reservation.ReservationDate:dd-MM-yyyy} at {reservation.ReservationTime:HH:mm}, " +
-                $"Table {reservation.SelectedTableId}, {reservation.NumberOfPeople} people");
+        List<string[]> menuList = new();
+
+        for (int i = 0; i < reservations.Count; i++)
+        {
+            if (reservations[i].UserID != currentAccount.Id)
+                continue;
+
+            menuList.Add(new string[]
+            {
+                $"User: {reservations[i].UserID}| " +
+                $"Reservation {reservations[i].Id}: {reservations[i].ReservationDate:dd-MM-yyyy} at {reservations[i].ReservationTime:HH:mm}, " +
+                $"Table {reservations[i].SelectedTableId}, {reservations[i].NumberOfPeople} people",
+                "Edit reservation",
+                "Back"
+            });
+
             displayedReservations++;
         }
 
         if (displayedReservations == 0)
-        {
             Console.WriteLine("No reservations found.");
-        }
 
-        Console.ReadLine();
+        menuList.Add(new string[] { "Go back" });
+
+        string[][] menu = menuList.ToArray();
+        (int, int) resChoice = (0, 0);
+
+        while (true)
+        {
+            resChoice = ArrowNavigation.PrintJaggedMenu(menu);
+
+            switch (resChoice)
+            {
+                case (1, 1):
+                    break;
+                case (2, 1):
+                    break;
+                case (3, 1):
+                    break;
+                case (4, 1):
+                    break;
+                case (5, 1):
+                    break;
+            }
+        }
     }
 }

@@ -23,7 +23,7 @@ public class FoodMenu
         while (true)
         {
             Style.Title("Which menu do you want to see?");
-            int choice = ArrowNavigation.ReadArray(Menu);
+            int choice = ArrowNavigation.PrintMenu(Menu);
 
             if (choice == countMenu + 1)
                 return;

@@ -28,7 +28,7 @@ public class AdminMenu
             Console.ResetColor();
             Console.WriteLine("Welcome to the Admin Homepage");
             Style.Title("Admin Homepage");
-            menuChoice = ArrowNavigation.ReadArray(Menu);
+            menuChoice = ArrowNavigation.PrintMenu(Menu);
             
             switch (menuChoice)
             {

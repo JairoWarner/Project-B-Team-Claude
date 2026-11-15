@@ -18,7 +18,7 @@ static class UserLogin
             Console.Clear();
             Style.Title("Welcome to the login page");
 
-            int choice = ArrowNavigation.ReadArray(Menu);
+            int choice = ArrowNavigation.PrintMenu(Menu);
 
             switch (choice)
             {
