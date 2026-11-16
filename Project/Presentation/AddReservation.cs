@@ -25,7 +25,7 @@ public class AddReservation
             return;
         }
 
-        if (_tableLogic.GetAvailableTables(reservationDate.Value, 1).Count == 0)
+        if (_tableLogic.GetAvailableTables(reservationDate.Value, 1).Count == 0 && _tableLogic.GetFreeBarSeats(reservationDate.Value).Count == 0)
         {
             Console.WriteLine("The selected time is fully booked. Please select another time or date.");
             Console.WriteLine("Press Enter to return to the main menu.");
@@ -211,9 +211,10 @@ public class AddReservation
     public List<int>? AskTable(DateTime reservationDate)
     {
         List<RestaurantTableModel> availableTables = _tableLogic.GetAvailableTables(reservationDate, NumberOfPeople);
-        if (availableTables.Count == 0)
+        List<int> freeBarSeats = _tableLogic.FindBarSeats(reservationDate, NumberOfPeople);
+        if (availableTables.Count == 0 && freeBarSeats.Count == 0)
         {
-            Console.WriteLine($"There are no available tables for {NumberOfPeople} people at the selected time.");
+            Console.WriteLine($"There are no available tables or bar seats for {NumberOfPeople} people at the selected time.");
             Console.WriteLine("Press Enter to return to the main menu.");
             Console.ReadLine();
             return null;

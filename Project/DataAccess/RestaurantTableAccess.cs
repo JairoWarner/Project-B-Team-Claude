@@ -50,6 +50,7 @@ public class RestaurantTableAccess
             FROM {Table}
             WHERE Available = 1
                 AND Seats >= @NumberOfPeople
+                AND Type = 'Table'
                 AND NOT EXISTS (
                     SELECT 1
                     FROM Reservation
