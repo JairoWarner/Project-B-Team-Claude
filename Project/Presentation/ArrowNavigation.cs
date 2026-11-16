@@ -64,8 +64,6 @@ public static class ArrowNavigation
 
         while (true)
         {
-            Console.Clear();
-
             for (int i = 0; i < menu.Length; i++)
             {
                 if (choice != i)
@@ -78,17 +76,19 @@ public static class ArrowNavigation
                     if (drop == false)
                         Style.Normal($"> {Style.Groen}{menu[i][0]}{Style.Reset}");
                     else
-                        Style.Normal(menu[i][0]);
-
-                    for (int i2 = 1; i2 < menu[i].Length; i2++)
                     {
-                        if (drop == true && index == i2)
+                        Style.Normal($"{menu[i][0]}");
+                        
+                        for (int i2 = 1; i2 < menu[i].Length; i2++)
                         {
-                            Style.Normal($"> {Style.Groen}{menu[i][i2]}{Style.Reset}");
-                        }
-                        else
-                        {
-                            Style.Normal($"     {menu[i][i2]}");
+                            if (drop == true && index == i2)
+                            {
+                                Style.Normal($"   > {Style.Groen}{menu[i][i2]}{Style.Reset}");
+                            }
+                            else
+                            {
+                                Style.Normal($"     {menu[i][i2]}");
+                            }
                         }
                     }
                 }
