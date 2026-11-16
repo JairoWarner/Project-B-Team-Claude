@@ -48,26 +48,30 @@ public class ReservationLogic
     {
         List<RestaurantTableModel> availableTables = _tableAccess.GetTablesAvailableAt(reservationDate, numberOfPeople);
 
-        if (availableTables.Count == 0)
-        {
-            bool aTableFitsTheParty = _tableAccess.GetTablesForDate(reservationDate, numberOfPeople).Count > 0;
-
-            if (aTableFitsTheParty && !_tableAccess.HasAvailabilityDuringDay(reservationDate, numberOfPeople))
-            {
-                throw new InvalidOperationException("Table is booked full for the day, please select another table");
-            }
-            else if (_tableAccess.HasOngoingReservation(reservationDate, numberOfPeople))
-            {
-                throw new InvalidOperationException("During the selected time there is an ongoing reservation");
-            }
-            else
-            {
-                throw new InvalidOperationException("Table is already booked at this time, please select a different time");
-            }
-        }
+        // if (availableTables.Count == 0)
+        // {
+        //     if (IsFullyBookedForDay(reservationDate, numberOfPeople))
+        //     {
+        //         throw new InvalidOperationException("Table is booked full for the day, please select another table");
+        //     }
+        //     else if (_tableAccess.HasOngoingReservation(reservationDate, numberOfPeople))
+        //     {
+        //         throw new InvalidOperationException("During the selected time there is an ongoing reservation");
+        //     }
+        //     else
+        //     {
+        //         throw new InvalidOperationException("Table is already booked at this time, please select a different time");
+        //     }
+        // }
 
         return availableTables[0].TableId;
     }
+
+    // public bool IsFullyBookedForDay(DateTime reservationDate, int numberOfPeople)
+    // {
+    //     bool aTableFitsTheParty = _tableAccess.GetTablesForDate(reservationDate, numberOfPeople).Count > 0;
+    //     return aTableFitsTheParty && !_tableAccess.HasAvailabilityDuringDay(reservationDate, numberOfPeople);
+    // }
 
     public static ReservationDateTimeValidationResult ValidateReservationDate(DateTime reservationDate, DateTime currentTime)
     {

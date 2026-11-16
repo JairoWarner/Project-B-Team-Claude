@@ -25,6 +25,14 @@ public class AddReservation
             return;
         }
 
+        if (_tableLogic.GetAvailableTables(reservationDate.Value, 1).Count == 0)
+        {
+            Console.WriteLine("The selected time is fully booked. Please select another time or date.");
+            Console.WriteLine("Press Enter to return to the main menu.");
+            Console.ReadLine();
+            return;
+        }
+
         if (!AskPeople() || !AskChildren())
         {
             return;
