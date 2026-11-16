@@ -38,8 +38,8 @@ public class AddReservation
             return;
         }
 
-        int? selectedTableId = AskTable(reservationDate.Value);
-        if (selectedTableId is null)
+        List<int>? selectedTableIds = AskTable(reservationDate.Value);
+        if (selectedTableIds is null)
         {
             return;
         }
@@ -48,15 +48,18 @@ public class AddReservation
 
         try
         {
-            _logic.AddReservation(new ReservationModel
+            foreach (var tableId in selectedTableIds)
             {
-                UserID = acc.Id,
-                NumberOfPeople = NumberOfPeople,
-                NumberOfChildren = NumberOfChildren,
-                ReservationDate = reservationDate.Value.Date,
-                ReservationTime = reservationDate.Value,
-                SelectedTableId = selectedTableId.Value
-            });
+                _logic.AddReservation(new ReservationModel
+                {
+                    UserID = acc.Id,
+                    NumberOfPeople = NumberOfPeople,
+                    NumberOfChildren = NumberOfChildren,
+                    ReservationDate = reservationDate.Value.Date,
+                    ReservationTime = reservationDate.Value,
+                    SelectedTableId = tableId
+                });
+            }
 
             Console.WriteLine("Reservation added successfully!");
         }
@@ -205,7 +208,7 @@ public class AddReservation
         }
     }
 
-    public int? AskTable(DateTime reservationDate)
+    public List<int>? AskTable(DateTime reservationDate)
     {
         List<RestaurantTableModel> availableTables = _tableLogic.GetAvailableTables(reservationDate, NumberOfPeople);
         if (availableTables.Count == 0)
@@ -221,12 +224,27 @@ public class AddReservation
             Console.Clear();
             RestaurantMap.DrawMap(reservationDate);
 
-            Console.WriteLine("\nWhich table would you like?");
+            Style.Normal("\nEnter the table number or 'B' for the bar: ");
             string? input = Console.ReadLine();
+
+            if (input?.ToUpper() == "B")
+            {
+                List<int> barSeats = _tableLogic.FindBarSeats(reservationDate, NumberOfPeople);
+
+                if (barSeats.Count != NumberOfPeople)
+                {
+                    Style.Error("Not enough seats available next to eachother");
+                    Style.Normal("Press any key to continue...");
+                    Console.ReadKey();
+                    continue;
+                }
+                Console.Clear();
+                return barSeats;
+            }
 
             if (!int.TryParse(input, out int choice))
             {
-                Console.WriteLine("Please enter a table number.");
+                Console.WriteLine("Please enter a table number or 'B' for the bar");
                 Console.ReadKey();
                 continue;
             }
@@ -244,7 +262,7 @@ public class AddReservation
             if (found)
             {
                 Console.Clear();
-                return choice;
+                return [choice];
             }
 
             Console.WriteLine("This table is not available or does not have enough seats.");

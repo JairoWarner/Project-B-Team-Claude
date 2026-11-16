@@ -11,6 +11,26 @@ public class RestaurantTableAccess
         string sql = $"SELECT ID as TableId, Available, Seats FROM {Table} ORDER BY TableId";
         return _connection.Query<RestaurantTableModel>(sql).ToList();
     }
+
+    public List<int> GetFreeBarSeats(DateTime moment)
+    {
+        string sql = $@"SELECT ID FROM {Table}
+                    WHERE Type = 'Bar'
+                    AND Available = 1
+                    AND NOT EXISTS (
+                        SELECT 1 FROM Reservation
+                        WHERE Reservation.TableID = {Table}.ID
+                        AND Reservation.Date || ' ' || Reservation.Time > @EarliestTime
+                        AND Reservation.Date || ' ' || Reservation.Time < @LatestTime
+                    )
+                    ORDER BY ID";
+        
+        return _connection.Query<int>(sql, new
+        {
+            EarliestTime = moment.AddHours(-2).ToString("yyyy-MM-dd HH:mm"),
+            LatestTime = moment.AddHours(2).ToString("yyyy-MM-dd HH:mm")
+        }).ToList();
+    }
     // Retrieves active tables with enough seats for the party.
     public List<RestaurantTableModel> GetTablesForDate(DateTime reservationDate, int numberOfPeople)
     {
