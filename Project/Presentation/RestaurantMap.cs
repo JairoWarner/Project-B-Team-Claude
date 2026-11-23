@@ -32,10 +32,18 @@ public static class RestaurantMap
         return color;
     }
 
-    public static void DrawMap(DateTime moment)
+    public static void DrawMap(DateTime moment, List<int>? selectedIds = null)
     {
         List<int> reservedIds = _reservationLogic.GetReservedTableIds(moment);
         List<int> userIds = _reservationLogic.GetUserTable(moment, (int)AccountsLogic.CurrentAccount!.Id);
+
+        if (selectedIds != null)
+        {
+            foreach (var id in selectedIds)
+            {
+                userIds.Add(id);
+            }
+        }
 
         Console.WriteLine("+--------------------------------------------------+");
         Console.WriteLine("|                      KITCHEN                     |");
