@@ -49,6 +49,11 @@ public class ShowReservation
         {
             resChoice = ArrowNavigation.PrintJaggedMenu(menu);
 
+            if (resChoice.Item1 == menu.Length)
+            {
+                return;
+            }
+
             switch (resChoice)
             {
                 case (1, 1):
