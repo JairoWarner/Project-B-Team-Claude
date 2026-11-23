@@ -54,14 +54,21 @@ public class ReservationAccess
         string sql = $"SELECT ID AS Id, UserID, TableID AS SelectedTableId, Date, Time, People AS NumberOfPeople FROM {Table} ORDER BY Date, Time";
         IEnumerable<ReservationRow> rows = _connection.Query<ReservationRow>(sql);
 
-        return rows.Select(row => new ReservationModel
+        return rows.Select(row =>
         {
-            Id = row.Id,
-            UserID = row.UserID,
-            SelectedTableId = row.SelectedTableId,
-            ReservationDate = DateTime.ParseExact(row.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture),
-            ReservationTime = DateTime.ParseExact(row.Time, "HH:mm", CultureInfo.InvariantCulture),
-            NumberOfPeople = row.NumberOfPeople
+            DateTime reservationDate = DateTime.ParseExact(row.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            DateTime reservationTime = reservationDate.Add(
+                TimeSpan.ParseExact(row.Time, "HH:mm", CultureInfo.InvariantCulture));
+
+            ReservationModel reservation = new(
+                row.UserID,
+                row.NumberOfPeople,
+                0,
+                reservationDate,
+                reservationTime,
+                row.SelectedTableId);
+            reservation.Id = row.Id;
+            return reservation;
         }).ToList();
     }
 
