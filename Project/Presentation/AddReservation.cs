@@ -230,6 +230,7 @@ public class AddReservation
 
             if (input?.ToUpper() == "B")
             {
+                Console.Clear();
                 List<int> barSeats = _tableLogic.FindBarSeats(reservationDate, NumberOfPeople);
 
                 if (barSeats.Count != NumberOfPeople)
@@ -237,6 +238,13 @@ public class AddReservation
                     Style.Error("Not enough seats available next to eachother");
                     Style.Normal("Press any key to continue...");
                     Console.ReadKey();
+                    continue;
+                }
+                RestaurantMap.DrawMap(reservationDate, barSeats);
+                Style.Normal("Are you sure? (Y/N)");
+                string? confirm = Console.ReadLine();
+                if (confirm?.ToUpper() != "Y")
+                {
                     continue;
                 }
                 Console.Clear();
@@ -262,6 +270,14 @@ public class AddReservation
 
             if (found)
             {
+                Console.Clear();
+                RestaurantMap.DrawMap(reservationDate, [choice]);
+                Style.Normal("Are you sure? (Y/N)");
+                string? confirm = Console.ReadLine();
+                if (confirm?.ToUpper() != "Y")
+                {
+                    continue;
+                }
                 Console.Clear();
                 return [choice];
             }
