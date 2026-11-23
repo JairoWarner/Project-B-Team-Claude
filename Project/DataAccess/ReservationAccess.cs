@@ -12,8 +12,15 @@ public class ReservationAccess
     // Creates the reservations table if it does not already exist.
     public ReservationAccess()
     {
-        string sql = $"CREATE TABLE IF NOT EXISTS {Table} (ID INTEGER PRIMARY KEY AUTOINCREMENT, UserID INTEGER NOT NULL, TableID INTEGER NOT NULL, OrderID INTEGER, Time TEXT NOT NULL, Date TEXT NOT NULL, People INTEGER NOT NULL)";
+        string sql = $"CREATE TABLE IF NOT EXISTS {Table} (ID INTEGER PRIMARY KEY AUTOINCREMENT, UserID INTEGER NOT NULL, TableID INTEGER NOT NULL, OrderID INTEGER, Time TEXT NOT NULL, Date TEXT NOT NULL, People INTEGER NOT NULL, Status TEXT NOT NULL DEFAULT 'Pending')";
         _connection.Execute(sql);
+
+        int statusColumnCount = _connection.ExecuteScalar<int>(
+            $"SELECT COUNT(*) FROM pragma_table_info('{Table}') WHERE name = 'Status'");
+        if (statusColumnCount == 0)
+        {
+            _connection.Execute($"ALTER TABLE {Table} ADD COLUMN Status TEXT NOT NULL DEFAULT 'Pending'");
+        }
     }
 
     
@@ -21,8 +28,8 @@ public class ReservationAccess
     public void Write(ReservationModel reservation)
     {
         string sql = $"""
-            INSERT INTO {Table} (UserID, TableID, Time, Date, People)
-            SELECT @UserID, @TableID, @Time, @Date, @People
+            INSERT INTO {Table} (UserID, TableID, Time, Date, People, Status)
+            SELECT @UserID, @TableID, @Time, @Date, @People, @Status
             WHERE NOT EXISTS (
                 SELECT 1
                 FROM {Table}
@@ -39,7 +46,8 @@ public class ReservationAccess
             Date = reservation.ReservationDate.ToString("yyyy-MM-dd"),
             EarliestAllowedTime = reservation.ReservationTime.AddHours(-2).ToString("yyyy-MM-dd HH:mm"),
             LatestAllowedTime = reservation.ReservationTime.AddHours(2).ToString("yyyy-MM-dd HH:mm"),
-            People = reservation.NumberOfPeople
+            People = reservation.NumberOfPeople,
+            Status = reservation.Status
         });
 
         if (rowsInserted == 0)
@@ -51,24 +59,21 @@ public class ReservationAccess
     // Retrieves all reservations ordered by date and time.
     public List<ReservationModel> GetAll()
     {
-        string sql = $"SELECT ID AS Id, UserID, TableID AS SelectedTableId, Date, Time, People AS NumberOfPeople FROM {Table} ORDER BY Date, Time";
+        string sql = $"SELECT ID AS Id, UserID, TableID AS SelectedTableId, Date, Time, People AS NumberOfPeople, Status FROM {Table} ORDER BY Date, Time";
         IEnumerable<ReservationRow> rows = _connection.Query<ReservationRow>(sql);
 
-        return rows.Select(row =>
+        return rows.Select(row => new ReservationModel
         {
-            DateTime reservationDate = DateTime.ParseExact(row.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
-            DateTime reservationTime = reservationDate.Add(
-                TimeSpan.ParseExact(row.Time, "HH:mm", CultureInfo.InvariantCulture));
-
-            ReservationModel reservation = new(
-                row.UserID,
-                row.NumberOfPeople,
-                0,
-                reservationDate,
-                reservationTime,
-                row.SelectedTableId);
-            reservation.Id = row.Id;
-            return reservation;
+            Id = row.Id,
+            UserID = row.UserID,
+            SelectedTableId = row.SelectedTableId,
+            ReservationDate = DateTime.ParseExact(row.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture),
+            ReservationTime = DateTime.ParseExact(
+                $"{row.Date} {row.Time}",
+                "yyyy-MM-dd HH:mm",
+                CultureInfo.InvariantCulture),
+            NumberOfPeople = row.NumberOfPeople,
+            Status = row.Status
         }).ToList();
     }
 
@@ -100,13 +105,20 @@ public class ReservationAccess
         }).ToList();
     }
 
+    public void ChangeToCanceled(int reservationId)
+    {
+        string sql = $@"UPDATE {Table} SET Status = 'Canceled' WHERE ID = @ReservationId";
+        _connection.Execute(sql, new { ReservationId = reservationId });
+    }
+
     private sealed class ReservationRow
     {
         public int Id { get; set; }
-        public int UserID { get; set; }
+        public long UserID { get; set; }
         public int SelectedTableId { get; set; }
         public string Date { get; set; } = "";
         public string Time { get; set; } = "";
         public int NumberOfPeople { get; set; }
+        public string Status { get; set; } = "Pending";
     }
 }

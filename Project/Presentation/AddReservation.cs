@@ -48,18 +48,17 @@ public class AddReservation
 
         try
         {
-            ReservationModel reservation = new(
-                acc.Id,
-                NumberOfPeople,
-                NumberOfChildren,
-                reservationDate.Value.Date,
-                reservationDate.Value,
-                0);
-
             foreach (var tableId in selectedTableIds)
             {
-                reservation.SelectedTableId = tableId;
-                _logic.AddReservation(reservation);
+                _logic.AddReservation(new ReservationModel
+                {
+                    UserID = acc.Id,
+                    NumberOfPeople = NumberOfPeople,
+                    NumberOfChildren = NumberOfChildren,
+                    ReservationDate = reservationDate.Value.Date,
+                    ReservationTime = reservationDate.Value,
+                    SelectedTableId = tableId
+                });
             }
 
             Console.WriteLine("Reservation added successfully!");

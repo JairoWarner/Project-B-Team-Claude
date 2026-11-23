@@ -12,7 +12,7 @@ public class AdminMenu
             "4: Restaurant Layout",
             "5: Food menu",
             "6: About Us",
-            $"7: Manage Reservations {Style.Rood}(Under Construction){Style.Reset}",
+            "7: Manage Reservations",
             "8: Log out"
         ];
 
@@ -61,9 +61,8 @@ public class AdminMenu
                     break;
 
                 case 7:
-                    Style.Normal("Manage Reservations is under construction.");
-                    Style.Normal("Press any key to continue..");
-                    Console.ReadKey();
+                    ManageResMenu manageResMenu = new();
+                    manageResMenu.ManageRes();
                     break;
 
                 case 8:
