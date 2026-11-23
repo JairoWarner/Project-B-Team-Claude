@@ -48,7 +48,7 @@ public class AdminMenu
                     break;
 
                 case 4:
-                    RestaurantMap.Start();
+                    RestaurantMap.Start(true);
                     break;
 
                 case 5:

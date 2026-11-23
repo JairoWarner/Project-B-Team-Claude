@@ -2,12 +2,12 @@ public static class RestaurantMap
 {
     private static RestaurantTableLogic _tableLogic = new();
     private static ReservationLogic _reservationLogic = new();
-    public static void Start()
+    public static void Start(bool admin = false)
     {
         Style.Setup();
         Style.Title("Restaurant Map");
 
-        DrawMap(DateTime.Now);
+        DrawMap(DateTime.Now, null, admin);
 
         Console.WriteLine("\nPress any key to go back...");
         Console.ReadKey();
@@ -32,7 +32,7 @@ public static class RestaurantMap
         return color;
     }
 
-    public static void DrawMap(DateTime moment, List<int>? selectedIds = null)
+    public static void DrawMap(DateTime moment, List<int>? selectedIds = null, bool admin = false)
     {
         List<int> reservedIds = _reservationLogic.GetReservedTableIds(moment);
         List<int> userIds = _reservationLogic.GetUserTable(moment, (int)AccountsLogic.CurrentAccount!.Id);
@@ -129,8 +129,15 @@ public static class RestaurantMap
         Console.WriteLine("Legend:");
         Console.WriteLine($"{Style.Groen}[  ]{Style.Reset} Free          Tables 1-8:   2 seats");
         Console.WriteLine($"{Style.Rood}[  ]{Style.Reset} Reserved      Tables 9-13:  4 seats");
-        Console.WriteLine($"{Style.Goud}[  ]{Style.Reset} Your table    Tables 14-15: 6 seats");
-        Console.WriteLine("                   Bar:          8 seats");
+        if (admin)
+        {
+            Console.WriteLine("                   Tables 14-15: 6 seats");
+        }
+        else
+        {
+            Console.WriteLine($"{Style.Goud}[  ]{Style.Reset} Your table    Tables 14-15: 6 seats");
+            Console.WriteLine("                   Bar:          8 seats");
+        }
     }
 
     private static void DrawTable(int tableId, List<int> reservedIds, List<int> userIds)
