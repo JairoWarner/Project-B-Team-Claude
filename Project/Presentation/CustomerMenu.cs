@@ -17,11 +17,14 @@ public class CustomerMenu
         
         while (true)
         {
-            Style.Setup();
-            Style.Logo();
-            Style.Title("Homepage");
-            
-            int choice = ArrowNavigation.PrintMenu(Menu);
+            int choice = ArrowNavigation.PrintMenu(Menu, () =>
+            {
+                Style.Setup();
+                Style.Logo();
+                Console.WriteLine();
+                Style.Title("Homepage");
+                Console.WriteLine();
+            });
             
             switch (choice)
             {

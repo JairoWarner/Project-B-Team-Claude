@@ -4,13 +4,15 @@ public static class ArrowNavigation
 {
     public static string CurrentChoice { get; set; }
     
-    public static int PrintMenu(string[] menu)
+    public static int PrintMenu(string[] menu, Action? header = null)
     {
         int choice = 0;
 
         while (true)
         {
             Console.Clear();
+            header?.Invoke();
+            
             for (int i = 0; i < menu.Length; i++)
             {
                 if (choice < 0)
@@ -56,7 +58,7 @@ public static class ArrowNavigation
     //     return 0;
     // }
 
-    public static (int, int) PrintJaggedMenu(string[][] menu)
+    public static (int, int) PrintJaggedMenu(string[][] menu, Action? header = null)
     {
         int choice = 0;
         int index = 1;
@@ -65,7 +67,8 @@ public static class ArrowNavigation
         while (true)
         {
             Console.Clear();
-
+            header?.Invoke();
+            
             for (int i = 0; i < menu.Length; i++)
             {
                 if (choice != i)
@@ -76,19 +79,21 @@ public static class ArrowNavigation
                 if (choice == i)
                 {
                     if (drop == false)
-                        Style.Normal($"> {Style.Groen}{menu[i][0]}{Style.Reset}");
+                        Style.Normal($"> {Style.Groen}{menu[i][0]}{Style.Reset} {Style.Rood}(Press Enter){Style.Reset}");
                     else
-                        Style.Normal(menu[i][0]);
-
-                    for (int i2 = 1; i2 < menu[i].Length; i2++)
                     {
-                        if (drop == true && index == i2)
+                        Style.Normal($"{menu[i][0]}");
+                        
+                        for (int i2 = 1; i2 < menu[i].Length; i2++)
                         {
-                            Style.Normal($"> {Style.Groen}{menu[i][i2]}{Style.Reset}");
-                        }
-                        else
-                        {
-                            Style.Normal($"     {menu[i][i2]}");
+                            if (drop == true && index == i2)
+                            {
+                                Style.Normal($"   > {Style.Groen}{menu[i][i2]}{Style.Reset}");
+                            }
+                            else
+                            {
+                                Style.Normal($"     {menu[i][i2]}");
+                            }
                         }
                     }
                 }

@@ -130,4 +130,10 @@ public class ReservationLogic
         return _access.GetUserTable(moment, userId);
     }
 
+    public void CancelReservation(int reservationId)
+    {
+        //changes status from pending to canceled, DOES NOT DELETE;
+        _access.ChangeToCanceled(reservationId);
+    }
+
 }

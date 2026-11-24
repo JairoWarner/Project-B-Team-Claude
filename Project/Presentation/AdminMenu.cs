@@ -12,8 +12,9 @@ public class AdminMenu
             "4: Restaurant Layout",
             "5: Food menu",
             "6: About Us",
-            $"7: Manage Reservations {Style.Rood}(Under Construction){Style.Reset}",
-            "8: Log out"
+            "7: Manage Reservations",
+            "8: Manage Menus",
+            "9: Log out"
         ];
 
         int menuChoice = 0;
@@ -61,12 +62,16 @@ public class AdminMenu
                     break;
 
                 case 7:
-                    Style.Normal("Manage Reservations is under construction.");
-                    Style.Normal("Press any key to continue..");
-                    Console.ReadKey();
+                    ManageResMenu manageResMenu = new();
+                    manageResMenu.ManageRes();
                     break;
 
-                case 8:
+                 case 8:
+                    MenuManagement menuManagement = new();
+                    menuManagement.Start();
+                    break;
+
+                case 9:
                     Console.Clear();
                     Console.WriteLine("You have been logged out");
                     UserLogin.LoginStart();
