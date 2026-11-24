@@ -16,9 +16,20 @@ static class UserLogin
         while (true)
         {
             Console.Clear();
-            Style.Title("Welcome to the login page");
 
-            int choice = ArrowNavigation.PrintMenu(Menu);
+            int choice = ArrowNavigation.PrintMenu(Menu, () =>
+            {
+                Console.WriteLine($"""
+                                   {Style.Goud}
+                                   __        __   _                            _   _               _
+                                   \ \      / /__| | ___ ___  _ __ ___   ___  | | | |___  ___ _ __| |
+                                    \ \ /\ / / _ \ |/ __/ _ \| '_ ` _ \ / _ \ | | | / __|/ _ \ '__| |
+                                     \ V  V /  __/ | (_| (_) | | | | | |  __/ | |_| \__ \  __/ |  |_|
+                                      \_/\_/ \___|_|\___\___/|_| |_| |_|\___|  \___/|___/\___|_|  (_)
+                                   {Style.Reset}
+                                   """);
+                Style.Normal($"{Style.LightGrey}──────────────────────────────────────\n");
+            });
 
             switch (choice)
             {

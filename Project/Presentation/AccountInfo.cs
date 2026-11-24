@@ -61,9 +61,11 @@ public class AccountInfo
         {
             Console.Clear();
             
-            Style.Title($"\n{Style.Goud}YOUR INFO");
-            Style.Normal($"{Style.LightGrey}──────────────────────────────────────\n");
-            InfoChoice = ArrowNavigation.PrintJaggedMenu(PersonalInfo);
+            InfoChoice = ArrowNavigation.PrintJaggedMenu(PersonalInfo, () =>
+            {
+                Style.Title($"\n{Style.Goud}YOUR INFO");
+                Style.Normal($"{Style.LightGrey}──────────────────────────────────────\n");
+            });
 
             switch (InfoChoice)
             {
