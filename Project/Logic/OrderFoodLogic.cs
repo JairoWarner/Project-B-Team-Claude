@@ -1,28 +1,37 @@
+
 public class OrderLogic
 {
-    private OrderModel _order = new();
-    private OrderAccess _access = new();
+    private readonly OrderModel _order = new();
+    private readonly OrderAccess _access = new();
 
-    public bool AddItem(FoodModel food, int age)
+    public bool AddItem(FoodModel food, int age, int quantity)
     {
-        if (food.IsAlcoholic == 1 && age < 18)
-        {
+        if (quantity < 1)
             return false;
+
+        if (food.IsAlcoholic == 1 && age < 18)
+            return false;
+
+        for (int i = 0; i < quantity; i++)
+        {
+            _order.Items.Add(food);
         }
 
-        _order.Items.Add(food);
         return true;
     }
 
     public static int CalculateAge(string dateOfBirth)
     {
-        DateTime birthdate = DateTime.ParseExact(dateOfBirth, "dd/mm/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+        DateTime birthdate = DateTime.ParseExact(
+            dateOfBirth,
+            "dd/MM/yyyy",
+            System.Globalization.CultureInfo.InvariantCulture
+        );
+
         int age = DateTime.Today.Year - birthdate.Year;
 
         if (birthdate > DateTime.Today.AddYears(-age))
-        {
             age--;
-        }
 
         return age;
     }
@@ -33,7 +42,10 @@ public class OrderLogic
     {
         return _order.Items
             .GroupBy(item => item.ID)
-            .Select(group => new OrderLine(group.First(), group.Count()))
+            .Select(group => new OrderLine(
+                group.First(),
+                group.Count()
+            ))
             .ToList();
     }
 
@@ -41,10 +53,15 @@ public class OrderLogic
     {
         if (IsEmpty)
         {
-            throw new InvalidOperationException("An empty order cannot be saved.");
+            throw new InvalidOperationException(
+                "An empty order cannot be saved."
+            );
         }
 
-        return _access.Write(GetLines(), CalculateTotalPrice());
+        return _access.Write(
+            GetLines(),
+            CalculateTotalPrice()
+        );
     }
 
     public double CalculateTotalPrice()
