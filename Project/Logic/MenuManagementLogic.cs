@@ -5,55 +5,113 @@ public class MenuManagementLogic
 {
     private readonly MenuManagementAcces _access = new();
 
-    // Check admin permissions
     public bool IsAdmin()
     {
         return AccountsLogic.CurrentAccount?.Role == CustomerRole.Admin;
     }
 
-    // Get all menus
     public List<MenuModel> GetAllMenus()
     {
         return _access.GetAllMenus();
     }
 
-    // Get food currently in a menu
     public List<FoodModel> GetFoodByMenu(long menuId)
     {
         return _access.GetFoodByMenu(menuId);
     }
 
-    // Get food not yet in a menu
     public List<FoodModel> GetFoodNotInMenu(long menuId)
     {
         return _access.GetFoodNotInMenu(menuId);
     }
 
-    // Add food to menu
     public bool AddFoodToMenu(long menuId, long foodId)
     {
         if (!IsAdmin())
             return false;
 
-        if (!_access.GetAllMenus().Any(m => m.ID == menuId))
+        bool menuExists = _access.GetAllMenus()
+            .Any(m => m.ID == menuId);
+
+        if (!menuExists)
             return false;
 
-        bool foodExists = _access.GetFoodNotInMenu(menuId)
+        bool foodAvailable = _access.GetFoodNotInMenu(menuId)
             .Any(f => f.ID == foodId);
 
-        if (!foodExists)
+        if (!foodAvailable)
             return false;
 
         return _access.AddFoodToMenu(menuId, foodId);
     }
 
-    // Remove food from menu
+    public bool AddFoodToStore(
+        string name,
+        double price,
+        string description,
+        string category,
+        bool isAlcoholic,
+        long? menuId,
+        out string message)
+    {
+        if (!IsAdmin())
+        {
+            message = "Admin privileges required.";
+            return false;
+        }
+
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            message = "Food name cannot be empty.";
+            return false;
+        }
+
+        if (price < 0)
+        {
+            message = "Price cannot be negative.";
+            return false;
+        }
+
+        if (string.IsNullOrWhiteSpace(category))
+        {
+            message = "Category cannot be empty.";
+            return false;
+        }
+
+        if (menuId.HasValue &&
+            !_access.GetAllMenus().Any(m => m.ID == menuId.Value))
+        {
+            message = "Selected menu does not exist.";
+            return false;
+        }
+
+        FoodModel food = new FoodModel(
+            0,
+            name.Trim(),
+            price,
+            description.Trim(),
+            category.Trim(),
+            isAlcoholic ? 1 : 0
+        );
+
+        bool success = _access.AddFoodToStore(food, menuId);
+
+        message = success
+            ? "Food successfully added to store!"
+            : "Could not add food to store.";
+
+        return success;
+    }
+
     public bool RemoveFoodFromMenu(long menuId, long foodId)
     {
         if (!IsAdmin())
             return false;
 
-        if (!_access.GetAllMenus().Any(m => m.ID == menuId))
+        bool menuExists = _access.GetAllMenus()
+            .Any(m => m.ID == menuId);
+
+        if (!menuExists)
             return false;
 
         bool foodExists = _access.GetFoodByMenu(menuId)
