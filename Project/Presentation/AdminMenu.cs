@@ -13,7 +13,8 @@ public class AdminMenu
             "5: Food menu",
             "6: About Us",
             "7: Manage Reservations",
-            "8: Log out"
+            "8: Manage Menus",
+            "9: Log out"
         ];
 
         int menuChoice = 0;
@@ -65,7 +66,12 @@ public class AdminMenu
                     manageResMenu.ManageRes();
                     break;
 
-                case 8:
+                 case 8:
+                    MenuManagement menuManagement = new();
+                    menuManagement.Start();
+                    break;
+
+                case 9:
                     Console.Clear();
                     Console.WriteLine("You have been logged out");
                     UserLogin.LoginStart();
