@@ -7,6 +7,7 @@ public class ReservationModel
 	public DateTime ReservationDate { get; set; }
 	public DateTime ReservationTime { get; set; }
 	public int SelectedTableId { get; set; }
+	public string Status { get; set; } = "Pending";
 
 	public ReservationModel()
 	{

@@ -14,7 +14,7 @@ public class ShowReservation
 
         ReservationLogic reservationLogic = new();
         List<ReservationModel> reservations = reservationLogic.GetReservations();
-        int displayedReservations = 0;
+        List<ReservationModel> displayedReservations = new();
 
         Console.WriteLine("Reservations:");
 
@@ -29,15 +29,16 @@ public class ShowReservation
             {
                 $"User: {reservations[i].UserID}| " +
                 $"Reservation {reservations[i].Id}: {reservations[i].ReservationDate:dd-MM-yyyy} at {reservations[i].ReservationTime:HH:mm}, " +
-                $"Table {reservations[i].SelectedTableId}, {reservations[i].NumberOfPeople} people",
+                $"Table {reservations[i].SelectedTableId}, {reservations[i].NumberOfPeople} people, Status: {reservations[i].Status}",
+                "Cancel reservation",
                 "Edit reservation",
                 "Back"
             });
 
-            displayedReservations++;
+            displayedReservations.Add(reservations[i]);
         }
 
-        if (displayedReservations == 0)
+        if (displayedReservations.Count == 0)
             Console.WriteLine("No reservations found.");
 
         menuList.Add(new string[] { "Go back" });
@@ -49,17 +50,23 @@ public class ShowReservation
         {
             resChoice = ArrowNavigation.PrintJaggedMenu(menu);
 
-            switch (resChoice)
+            if (resChoice.Item1 == menu.Length)
             {
-                case (1, 1):
+                return;
+            }
+
+            switch (resChoice.Item2)
+            {
+                case 1:
+                    reservationLogic.CancelReservation(displayedReservations[resChoice.Item1 - 1].Id);
+                    Console.WriteLine("Reservation canceled.");
+                    Console.ReadLine();
+                    return;
+                case 2:
+                    Style.Error("Not implemented yet");
                     break;
-                case (2, 1):
-                    break;
-                case (3, 1):
-                    break;
-                case (4, 1):
-                    break;
-                case (5, 1):
+                case 3:
+                    Style.Error("Not implemented yet");
                     break;
             }
         }

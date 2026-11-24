@@ -25,7 +25,7 @@ public class AddReservation
             return;
         }
 
-        if (_tableLogic.GetAvailableTables(reservationDate.Value, 1).Count == 0)
+        if (_tableLogic.GetAvailableTables(reservationDate.Value, 1).Count == 0 && _tableLogic.GetFreeBarSeats(reservationDate.Value).Count == 0)
         {
             Console.WriteLine("The selected time is fully booked. Please select another time or date.");
             Console.WriteLine("Press Enter to return to the main menu.");
@@ -38,8 +38,8 @@ public class AddReservation
             return;
         }
 
-        int? selectedTableId = AskTable(reservationDate.Value);
-        if (selectedTableId is null)
+        List<int>? selectedTableIds = AskTable(reservationDate.Value);
+        if (selectedTableIds is null)
         {
             return;
         }
@@ -48,15 +48,18 @@ public class AddReservation
 
         try
         {
-            _logic.AddReservation(new ReservationModel
+            foreach (var tableId in selectedTableIds)
             {
-                UserID = acc.Id,
-                NumberOfPeople = NumberOfPeople,
-                NumberOfChildren = NumberOfChildren,
-                ReservationDate = reservationDate.Value.Date,
-                ReservationTime = reservationDate.Value,
-                SelectedTableId = selectedTableId.Value
-            });
+                _logic.AddReservation(new ReservationModel
+                {
+                    UserID = acc.Id,
+                    NumberOfPeople = NumberOfPeople,
+                    NumberOfChildren = NumberOfChildren,
+                    ReservationDate = reservationDate.Value.Date,
+                    ReservationTime = reservationDate.Value,
+                    SelectedTableId = tableId
+                });
+            }
 
             Console.WriteLine("Reservation added successfully!");
         }
@@ -205,12 +208,13 @@ public class AddReservation
         }
     }
 
-    public int? AskTable(DateTime reservationDate)
+    public List<int>? AskTable(DateTime reservationDate)
     {
         List<RestaurantTableModel> availableTables = _tableLogic.GetAvailableTables(reservationDate, NumberOfPeople);
-        if (availableTables.Count == 0)
+        List<int> freeBarSeats = _tableLogic.FindBarSeats(reservationDate, NumberOfPeople);
+        if (availableTables.Count == 0 && freeBarSeats.Count == 0)
         {
-            Console.WriteLine($"There are no available tables for {NumberOfPeople} people at the selected time.");
+            Console.WriteLine($"There are no available tables or bar seats for {NumberOfPeople} people at the selected time.");
             Console.WriteLine("Press Enter to return to the main menu.");
             Console.ReadLine();
             return null;
@@ -221,12 +225,35 @@ public class AddReservation
             Console.Clear();
             RestaurantMap.DrawMap(reservationDate);
 
-            Console.WriteLine("\nWhich table would you like?");
+            Style.Normal("\nEnter the table number or 'B' for the bar: ");
             string? input = Console.ReadLine();
+
+            if (input?.ToUpper() == "B")
+            {
+                Console.Clear();
+                List<int> barSeats = _tableLogic.FindBarSeats(reservationDate, NumberOfPeople);
+
+                if (barSeats.Count != NumberOfPeople)
+                {
+                    Style.Error("Not enough seats available next to eachother");
+                    Style.Normal("Press any key to continue...");
+                    Console.ReadKey();
+                    continue;
+                }
+                RestaurantMap.DrawMap(reservationDate, barSeats);
+                Style.Normal("Are you sure? (Y/N)");
+                string? confirm = Console.ReadLine();
+                if (confirm?.ToUpper() != "Y")
+                {
+                    continue;
+                }
+                Console.Clear();
+                return barSeats;
+            }
 
             if (!int.TryParse(input, out int choice))
             {
-                Console.WriteLine("Please enter a table number.");
+                Console.WriteLine("Please enter a table number or 'B' for the bar");
                 Console.ReadKey();
                 continue;
             }
@@ -244,7 +271,15 @@ public class AddReservation
             if (found)
             {
                 Console.Clear();
-                return choice;
+                RestaurantMap.DrawMap(reservationDate, [choice]);
+                Style.Normal("Are you sure? (Y/N)");
+                string? confirm = Console.ReadLine();
+                if (confirm?.ToUpper() != "Y")
+                {
+                    continue;
+                }
+                Console.Clear();
+                return [choice];
             }
 
             Console.WriteLine("This table is not available or does not have enough seats.");
