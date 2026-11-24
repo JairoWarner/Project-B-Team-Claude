@@ -1,3 +1,4 @@
+
 using Project.DataModels;
 
 public class MenuManagementLogic
@@ -16,71 +17,51 @@ public class MenuManagementLogic
         return _access.GetAllMenus();
     }
 
-    // Get all food
-    public List<FoodModel> GetAllFood()
+    // Get food currently in a menu
+    public List<FoodModel> GetFoodByMenu(long menuId)
     {
-        return _access.GetAllFood();
+        return _access.GetFoodByMenu(menuId);
     }
 
-    // Add menu
-    public bool AddMenu(
-        string name,
-        string description,
-        List<long> foodIds)
+    // Get food not yet in a menu
+    public List<FoodModel> GetFoodNotInMenu(long menuId)
+    {
+        return _access.GetFoodNotInMenu(menuId);
+    }
+
+    // Add food to menu
+    public bool AddFoodToMenu(long menuId, long foodId)
     {
         if (!IsAdmin())
             return false;
 
-        if (string.IsNullOrWhiteSpace(name))
+        if (!_access.GetAllMenus().Any(m => m.ID == menuId))
             return false;
 
-        if (string.IsNullOrWhiteSpace(description))
+        bool foodExists = _access.GetFoodNotInMenu(menuId)
+            .Any(f => f.ID == foodId);
+
+        if (!foodExists)
             return false;
 
-        if (foodIds == null || foodIds.Count == 0)
-            return false;
-
-        // Check duplicate menu names
-        if (_access.GetAllMenus().Any(m =>
-            m.Name.Equals(
-                name.Trim(),
-                StringComparison.OrdinalIgnoreCase)))
-        {
-            return false;
-        }
-
-        // Check if food IDs exist
-        List<long> existingFoodIds = _access.GetAllFood()
-            .Select(f => f.ID)
-            .ToList();
-
-        if (foodIds.Any(id => !existingFoodIds.Contains(id)))
-            return false;
-
-        MenuModel menu = new MenuModel(
-            0,
-            name.Trim(),
-            description.Trim()
-        );
-
-        return _access.AddMenu(menu, foodIds.Distinct().ToList());
+        return _access.AddFoodToMenu(menuId, foodId);
     }
 
-    // Remove menu
-    public bool RemoveMenu(long menuId)
+    // Remove food from menu
+    public bool RemoveFoodFromMenu(long menuId, long foodId)
     {
         if (!IsAdmin())
             return false;
 
-        if (menuId <= 0)
+        if (!_access.GetAllMenus().Any(m => m.ID == menuId))
             return false;
 
-        bool menuExists = _access.GetAllMenus()
-            .Any(m => m.ID == menuId);
+        bool foodExists = _access.GetFoodByMenu(menuId)
+            .Any(f => f.ID == foodId);
 
-        if (!menuExists)
+        if (!foodExists)
             return false;
 
-        return _access.RemoveMenu(menuId);
+        return _access.RemoveFoodFromMenu(menuId, foodId);
     }
 }

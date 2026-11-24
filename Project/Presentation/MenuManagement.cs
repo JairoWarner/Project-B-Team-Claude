@@ -1,4 +1,3 @@
-using Project.Presentation;
 
 public class MenuManagement
 {
@@ -6,7 +5,7 @@ public class MenuManagement
 
     public void Start()
     {
-        // Admin authorization
+        // Check admin permissions
         if (!_logic.IsAdmin())
         {
             Style.Error("Access denied. Admin privileges required.");
@@ -14,10 +13,10 @@ public class MenuManagement
             return;
         }
 
-        string[] menu =
+        string[] options =
         {
-            "Add Menu",
-            "Remove Menu",
+            "Add Food / Drink to Menu",
+            "Remove Food / Drink from Menu",
             "Go Back"
         };
 
@@ -26,16 +25,16 @@ public class MenuManagement
             Style.Setup();
             Style.Title("MENU MANAGEMENT");
 
-            int choice = ArrowNavigation.PrintMenu(menu);
+            int choice = ArrowNavigation.PrintMenu(options);
 
             switch (choice)
             {
                 case 1:
-                    AddMenu();
+                    AddFood();
                     break;
 
                 case 2:
-                    RemoveMenu();
+                    RemoveFood();
                     break;
 
                 case 3:
@@ -44,64 +43,11 @@ public class MenuManagement
         }
     }
 
-    // Add menu
-    private void AddMenu()
+    // Select an existing menu
+    private long SelectMenu()
     {
         Style.Setup();
-        Style.Title("ADD MENU");
-
-        Console.Write("\nMenu name: ");
-        string name = Console.ReadLine() ?? "";
-
-        Console.Write("Menu description: ");
-        string description = Console.ReadLine() ?? "";
-
-        List<FoodModel> foods = _logic.GetAllFood();
-
-        Style.Title("\nAVAILABLE FOOD");
-
-        foreach (FoodModel food in foods)
-        {
-            Console.WriteLine(
-                $"{food.ID}. {food.FoodName} - €{food.Price:0.00}"
-            );
-        }
-
-        Console.Write("\nEnter Food IDs separated by commas: ");
-
-        List<long> foodIds;
-
-        try
-        {
-            foodIds = (Console.ReadLine() ?? "")
-                .Split(',')
-                .Select(id => long.Parse(id.Trim()))
-                .Distinct()
-                .ToList();
-        }
-        catch
-        {
-            Style.Error("Invalid Food IDs.");
-            Console.ReadKey(true);
-            return;
-        }
-
-        bool result = _logic.AddMenu(name, description, foodIds);
-
-        if (result)
-            Style.Success("Menu successfully added!");
-        else
-            Style.Error("Could not add menu. Check your input.");
-
-        Console.WriteLine("\nPress any key to continue...");
-        Console.ReadKey(true);
-    }
-
-    // Remove menu
-    private void RemoveMenu()
-    {
-        Style.Setup();
-        Style.Title("REMOVE MENU");
+        Style.Title("SELECT MENU");
 
         List<MenuModel> menus = _logic.GetAllMenus();
 
@@ -109,14 +55,12 @@ public class MenuManagement
         {
             Style.Error("No menus available.");
             Console.ReadKey(true);
-            return;
+            return 0;
         }
 
         foreach (MenuModel menu in menus)
         {
-            Console.WriteLine(
-                $"{menu.ID}. {menu.Name} - {menu.Description}"
-            );
+            Style.Normal($"{menu.ID}. {menu.Name}");
         }
 
         Console.Write("\nEnter Menu ID: ");
@@ -125,28 +69,141 @@ public class MenuManagement
         {
             Style.Error("Invalid Menu ID.");
             Console.ReadKey(true);
-            return;
+            return 0;
         }
 
-        Console.Write("\nAre you sure you want to remove this menu? (Y/N): ");
-
-        string confirmation = Console.ReadLine() ?? "";
-
-        if (!confirmation.Equals("Y", StringComparison.OrdinalIgnoreCase))
+        if (!menus.Any(m => m.ID == menuId))
         {
-            Style.Normal("Removal cancelled.");
+            Style.Error("Menu does not exist.");
             Console.ReadKey(true);
-            return;
+            return 0;
         }
 
-        bool result = _logic.RemoveMenu(menuId);
+        return menuId;
+    }
 
-        if (result)
-            Style.Success("Menu successfully removed!");
-        else
-            Style.Error("Could not remove menu.");
+    // Add food or drinks to a menu
+    private void AddFood()
+    {
+        long menuId = SelectMenu();
 
-        Console.WriteLine("\nPress any key to continue...");
-        Console.ReadKey(true);
+        if (menuId == 0)
+            return;
+
+        while (true)
+        {
+            Style.Setup();
+            Style.Title("ADD FOOD / DRINK");
+
+            List<FoodModel> foods =
+                _logic.GetFoodNotInMenu(menuId);
+
+            if (foods.Count == 0)
+            {
+                Style.Normal("All available food items are already in this menu.");
+                Console.ReadKey(true);
+                return;
+            }
+
+            foreach (FoodModel food in foods)
+            {
+                Style.Normal(
+                    $"{food.ID}. {food.FoodName} | {food.Category} | €{food.Price:0.00}");
+            }
+
+            Console.Write("\nEnter Food ID to add (0 to finish): ");
+
+            if (!long.TryParse(Console.ReadLine(), out long foodId))
+            {
+                Style.Error("Invalid Food ID.");
+                Console.ReadKey(true);
+                continue;
+            }
+
+            if (foodId == 0)
+                return;
+
+            bool success = _logic.AddFoodToMenu(menuId, foodId);
+
+            if (success)
+                Style.Success("Food successfully added to menu!");
+            else
+                Style.Error("Could not add food to menu.");
+
+            Console.ReadKey(true);
+        }
+    }
+
+    // Remove food or drinks from a menu
+    private void RemoveFood()
+    {
+        long menuId = SelectMenu();
+
+        if (menuId == 0)
+            return;
+
+        while (true)
+        {
+            Style.Setup();
+            Style.Title("REMOVE FOOD / DRINK");
+
+            List<FoodModel> foods =
+                _logic.GetFoodByMenu(menuId);
+
+            if (foods.Count == 0)
+            {
+                Style.Normal("This menu contains no food items.");
+                Console.ReadKey(true);
+                return;
+            }
+
+            foreach (FoodModel food in foods)
+            {
+                Style.Normal(
+                    $"{food.ID}. {food.FoodName} | {food.Category} | €{food.Price:0.00}");
+            }
+
+            Console.Write("\nEnter Food ID to remove (0 to finish): ");
+
+            if (!long.TryParse(Console.ReadLine(), out long foodId))
+            {
+                Style.Error("Invalid Food ID.");
+                Console.ReadKey(true);
+                continue;
+            }
+
+            if (foodId == 0)
+                return;
+
+            bool exists = foods.Any(f => f.ID == foodId);
+
+            if (!exists)
+            {
+                Style.Error("This food item is not in the selected menu.");
+                Console.ReadKey(true);
+                continue;
+            }
+
+            Console.Write("Are you sure? (Y/N): ");
+
+            string confirmation = Console.ReadLine() ?? "";
+
+            if (!confirmation.Equals(
+                "Y", StringComparison.OrdinalIgnoreCase))
+            {
+                Style.Normal("Removal cancelled.");
+                Console.ReadKey(true);
+                continue;
+            }
+
+            bool success = _logic.RemoveFoodFromMenu(menuId, foodId);
+
+            if (success)
+                Style.Success("Food successfully removed from menu!");
+            else
+                Style.Error("Could not remove food from menu.");
+
+            Console.ReadKey(true);
+        }
     }
 }

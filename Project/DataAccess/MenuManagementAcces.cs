@@ -12,98 +12,88 @@ public class MenuManagementAcces
     {
         using var connection = new SqliteConnection(_connectionString);
 
-        string sql = "SELECT * FROM Menu";
+        string sql = "SELECT * FROM Menu ORDER BY ID";
 
         return connection.Query<MenuModel>(sql).ToList();
     }
 
-    // Get all available food
-    public List<FoodModel> GetAllFood()
+    // Get all food items currently in a menu
+    public List<FoodModel> GetFoodByMenu(long menuId)
     {
         using var connection = new SqliteConnection(_connectionString);
 
-        string sql = "SELECT * FROM Food";
+        string sql = @"
+            SELECT F.*
+            FROM Food F
+            INNER JOIN MenuFood MF ON F.ID = MF.FoodID
+            WHERE MF.MenuID = @MenuID
+            ORDER BY F.Category, F.FoodName";
 
-        return connection.Query<FoodModel>(sql).ToList();
+        return connection.Query<FoodModel>(
+            sql, new { MenuID = menuId }).ToList();
     }
 
-    // Add a new menu with selected food
-    public bool AddMenu(MenuModel menu, List<long> foodIds)
+    // Get food items that are not yet in the selected menu
+    public List<FoodModel> GetFoodNotInMenu(long menuId)
     {
         using var connection = new SqliteConnection(_connectionString);
-        connection.Open();
 
-        using var transaction = connection.BeginTransaction();
+        string sql = @"
+            SELECT F.*
+            FROM Food F
+            WHERE NOT EXISTS (
+                SELECT 1
+                FROM MenuFood MF
+                WHERE MF.FoodID = F.ID
+                AND MF.MenuID = @MenuID
+            )
+            ORDER BY F.Category, F.FoodName";
+
+        return connection.Query<FoodModel>(
+            sql, new { MenuID = menuId }).ToList();
+    }
+
+    // Add food to an existing menu
+    public bool AddFoodToMenu(long menuId, long foodId)
+    {
+        using var connection = new SqliteConnection(_connectionString);
+
+        string sql = @"
+            INSERT INTO MenuFood (MenuID, FoodID)
+            VALUES (@MenuID, @FoodID)";
 
         try
         {
-            string sql = @"
-                INSERT INTO Menu (Name, Description)
-                VALUES (@Name, @Description);
-
-                SELECT last_insert_rowid();";
-
-            long menuId = connection.ExecuteScalar<long>(
-                sql, menu, transaction);
-
-            foreach (long foodId in foodIds)
+            int result = connection.Execute(sql, new
             {
-                string foodSql = @"
-                    INSERT INTO MenuFood (MenuID, FoodID)
-                    VALUES (@MenuID, @FoodID)";
-
-                connection.Execute(
-                    foodSql,
-                    new { MenuID = menuId, FoodID = foodId },
-                    transaction);
-            }
-
-            transaction.Commit();
-            return true;
-        }
-        catch
-        {
-            transaction.Rollback();
-            return false;
-        }
-    }
-
-    // Remove an existing menu
-    public bool RemoveMenu(long menuId)
-    {
-        using var connection = new SqliteConnection(_connectionString);
-        connection.Open();
-
-        using var transaction = connection.BeginTransaction();
-
-        try
-        {
-            string deleteFoodSql = @"
-                DELETE FROM MenuFood
-                WHERE MenuID = @MenuID";
-
-            connection.Execute(
-                deleteFoodSql,
-                new { MenuID = menuId },
-                transaction);
-
-            string deleteMenuSql = @"
-                DELETE FROM Menu
-                WHERE ID = @MenuID";
-
-            int result = connection.Execute(
-                deleteMenuSql,
-                new { MenuID = menuId },
-                transaction);
-
-            transaction.Commit();
+                MenuID = menuId,
+                FoodID = foodId
+            });
 
             return result > 0;
         }
-        catch
+        catch (SqliteException)
         {
-            transaction.Rollback();
             return false;
         }
+    }
+
+    // Remove food from an existing menu
+    public bool RemoveFoodFromMenu(long menuId, long foodId)
+    {
+        using var connection = new SqliteConnection(_connectionString);
+
+        string sql = @"
+            DELETE FROM MenuFood
+            WHERE MenuID = @MenuID
+            AND FoodID = @FoodID";
+
+        int result = connection.Execute(sql, new
+        {
+            MenuID = menuId,
+            FoodID = foodId
+        });
+
+        return result > 0;
     }
 }
