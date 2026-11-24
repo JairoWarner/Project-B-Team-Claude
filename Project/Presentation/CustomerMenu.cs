@@ -10,10 +10,9 @@ public class CustomerMenu
             "1: My Details",
             "2: Make Reservation",
             "3: Show Reservations",
-            "4: Restaurant Layout",
-            "5: Food menu",
-            "6: About Us",
-            "7: Log out"
+            "4: Food menu",
+            "5: About Us",
+            "6: Log out"
         ];
         
         while (true)
@@ -45,19 +44,15 @@ public class CustomerMenu
                     break;
 
                 case 4:
-                    RestaurantMap.Start();
-                    break;
-
-                case 5:
                     FoodMenu menu = new();
                     menu.ChooseMenu();
                     break;
 
-                case 6:
+                case 5:
                     RestaurantInfo.PrintInfo();
                     break;
 
-                case 7:
+                case 6:
                     Console.Clear();
                     Console.WriteLine("You have been logged out");
                     UserLogin.LoginStart();

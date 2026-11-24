@@ -45,11 +45,11 @@ public class AdminMenu
 
                 case 3:
                     ShowReservation showReservations = new();
-                    showReservations.ShowReservations();
+                    showReservations.ShowReservations(true);
                     break;
 
                 case 4:
-                    RestaurantMap.Start();
+                    RestaurantMap.Start(true);
                     break;
 
                 case 5:
