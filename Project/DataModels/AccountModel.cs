@@ -20,13 +20,5 @@
         Role = role;
         DateOfBirth = dateofbirth;
     }
-
-    public AccountModel(string fullName, string email, string phone, string dateOfBirth)
-    {
-        FullName = fullName;
-        EmailAddress = email;
-        Phone = phone;
-        DateOfBirth = dateOfBirth;
-    }
 }
 

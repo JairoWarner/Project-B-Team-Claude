@@ -64,6 +64,8 @@ public static class ArrowNavigation
 
         while (true)
         {
+            Console.Clear();
+            
             for (int i = 0; i < menu.Length; i++)
             {
                 if (choice != i)
