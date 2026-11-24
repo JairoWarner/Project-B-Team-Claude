@@ -2,7 +2,7 @@ using Project.Presentation;
 
 public class ShowReservation
 {
-    public void ShowReservations()
+    public void ShowReservations(bool admin = false)
     {
         AccountModel? currentAccount = AccountsLogic.CurrentAccount;
         if (currentAccount is null)
@@ -22,7 +22,7 @@ public class ShowReservation
 
         for (int i = 0; i < reservations.Count; i++)
         {
-            if (reservations[i].UserID != currentAccount.Id)
+            if (!admin && reservations[i].UserID != currentAccount.Id)
                 continue;
 
             menuList.Add(new string[]

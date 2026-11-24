@@ -14,12 +14,12 @@ public class ManageResMenu
             {
                 case 1:
                     ShowReservation showReservations = new();
-                    showReservations.ShowReservations();
+                    showReservations.ShowReservations(true);
                     break;
 
                 case 2:
                     AdminAddRes adminAddRes = new();
-                    adminAddRes.AddWalkInReservation();
+                    adminAddRes.AddReservation();
                     break;
 
                 case 3:

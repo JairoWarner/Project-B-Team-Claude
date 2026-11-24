@@ -8,6 +8,16 @@ public static class RestaurantMap
         Style.Title("Restaurant Map");
 
         DrawMap(DateTime.Now, null, admin);
+        if (admin)
+        {
+            Style.Normal("Do you want to add a reservation for a walk-in? (Y/N)");
+            string? adminInput = Console.ReadLine();
+            if (adminInput?.ToUpper() == "Y")
+            {
+                AdminAddRes adminAddRes = new();
+                adminAddRes.AddReservation(true);
+            }
+        }
 
         Console.WriteLine("\nPress any key to go back...");
         Console.ReadKey();
