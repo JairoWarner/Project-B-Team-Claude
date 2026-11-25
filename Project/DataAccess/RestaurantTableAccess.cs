@@ -21,6 +21,7 @@ public class RestaurantTableAccess
                         SELECT 1 FROM Reservation
                         WHERE Reservation.TableID = {Table}.ID
                         AND (@ExcludedReservationId IS NULL OR Reservation.ID != @ExcludedReservationId)
+                        AND LOWER(COALESCE(Reservation.Status, '')) != 'canceled'
                         AND Reservation.Date || ' ' || Reservation.Time > @EarliestTime
                         AND Reservation.Date || ' ' || Reservation.Time < @LatestTime
                     )
@@ -58,6 +59,7 @@ public class RestaurantTableAccess
                     FROM Reservation
                     WHERE Reservation.TableID = {Table}.ID
                         AND (@ExcludedReservationId IS NULL OR Reservation.ID != @ExcludedReservationId)
+                        AND LOWER(COALESCE(Reservation.Status, '')) != 'canceled'
                         AND Reservation.Date || ' ' || Reservation.Time > @EarliestAllowedTime
                         AND Reservation.Date || ' ' || Reservation.Time < @LatestAllowedTime
                 )
@@ -83,6 +85,7 @@ public class RestaurantTableAccess
                 INNER JOIN {Table} ON Reservation.TableID = {Table}.ID
                 WHERE {Table}.Available = 1
                     AND {Table}.Seats >= @NumberOfPeople
+                    AND LOWER(COALESCE(Reservation.Status, '')) != 'canceled'
                     AND Reservation.Date || ' ' || Reservation.Time >= @EarliestAllowedTime
                     AND Reservation.Date || ' ' || Reservation.Time <= @ReservationTime
             )
@@ -105,7 +108,7 @@ public class RestaurantTableAccess
             return false;
         }
 
-        string sql = "SELECT TableID, Time FROM Reservation WHERE Date = @Date";
+        string sql = "SELECT TableID, Time FROM Reservation WHERE Date = @Date AND LOWER(COALESCE(Status, '')) != 'canceled'";
         List<ReservationTimeRow> reservations = _connection.Query<ReservationTimeRow>(sql, new
         {
             Date = reservationDate.ToString("yyyy-MM-dd")

@@ -57,7 +57,28 @@ public class ShowReservation
             switch (resChoice.Item2)
             {
                 case 1:
-                    reservationLogic.CancelReservation(displayedReservations[resChoice.Item1 - 1].Id);
+                    ReservationModel selectedReservation = displayedReservations[resChoice.Item1 - 1];
+
+                    if (!selectedReservation.Status.Equals("Pending", StringComparison.OrdinalIgnoreCase))
+                    {
+                        Console.WriteLine("Only pending reservations can be canceled.");
+                        Console.ReadLine();
+                        return;
+                    }
+
+                    DateTime reservationDateTime = selectedReservation.ReservationDate.Date
+                        .Add(selectedReservation.ReservationTime.TimeOfDay);
+
+                    if (!admin
+                        && ReservationLogic.NeedsShortNoticeConfirmation(reservationDateTime, DateTime.Now)
+                        && !ConfirmCancellationFee())
+                    {
+                        Console.WriteLine("Cancellation stopped.");
+                        Console.ReadLine();
+                        return;
+                    }
+
+                    reservationLogic.CancelReservation(selectedReservation.Id);
                     Console.WriteLine("Reservation canceled.");
                     Console.ReadLine();
                     return;
@@ -68,6 +89,24 @@ public class ShowReservation
                     Style.Error("Not implemented yet");
                     break;
             }
+        }
+    }
+
+    private static bool ConfirmCancellationFee()
+    {
+        Console.WriteLine("This reservation is due within 48 hours.");
+        Console.WriteLine("You will have to pay a cancellation fee of 30 dollars.");
+
+        while (true)
+        {
+            Console.Write("Confirm cancellation Y/N: ");
+            string response = Console.ReadLine() ?? "";
+
+            if (response.Equals("Y", StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            if (response.Equals("N", StringComparison.OrdinalIgnoreCase))
+                return false;
         }
     }
 }
