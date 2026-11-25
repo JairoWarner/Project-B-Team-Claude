@@ -4,7 +4,7 @@ public class ManageResMenu
 {
     public void ManageRes()
     {
-        string[] menu = { "View / Cancel Reservations", "Add Walk-in Reservation", "Edit Reservation", "Back" };
+        string[] menu = { "View / Cancel Reservations", "Add Reservation", "Edit Reservation", "Back" };
 
         while (true)
         {
@@ -19,7 +19,7 @@ public class ManageResMenu
 
                 case 2:
                     AdminAddRes adminAddRes = new();
-                    adminAddRes.AddReservation(true);
+                    adminAddRes.AddReservation();
                     break;
 
                 case 3:
