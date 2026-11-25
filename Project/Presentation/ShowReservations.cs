@@ -31,7 +31,6 @@ public class ShowReservation
                 $"Reservation {reservations[i].Id}: {reservations[i].ReservationDate:dd-MM-yyyy} at {reservations[i].ReservationTime:HH:mm}, " +
                 $"Table {reservations[i].SelectedTableId}, {reservations[i].NumberOfPeople} people, Status: {reservations[i].Status}",
                 "Cancel reservation",
-                "Edit reservation",
                 "Back"
             });
 

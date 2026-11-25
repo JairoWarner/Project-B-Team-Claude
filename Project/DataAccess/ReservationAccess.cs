@@ -1,7 +1,6 @@
 
 using Dapper;
 using Microsoft.Data.Sqlite;
-using System.Globalization;
 using System.Linq;
 
 public class ReservationAccess
@@ -59,22 +58,19 @@ public class ReservationAccess
     // Retrieves all reservations ordered by date and time.
     public List<ReservationModel> GetAll()
     {
-        string sql = $"SELECT ID AS Id, UserID, TableID AS SelectedTableId, Date, Time, People AS NumberOfPeople, Status FROM {Table} ORDER BY Date, Time";
-        IEnumerable<ReservationRow> rows = _connection.Query<ReservationRow>(sql);
+        string sql = $"""
+            SELECT ID AS Id,
+                UserID,
+                TableID AS SelectedTableId,
+                Date AS ReservationDate,
+                Date || ' ' || Time AS ReservationTime,
+                People AS NumberOfPeople,
+                Status
+            FROM {Table}
+            ORDER BY Date, Time
+            """;
 
-        return rows.Select(row => new ReservationModel
-        {
-            Id = row.Id,
-            UserID = row.UserID,
-            SelectedTableId = row.SelectedTableId,
-            ReservationDate = DateTime.ParseExact(row.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture),
-            ReservationTime = DateTime.ParseExact(
-                $"{row.Date} {row.Time}",
-                "yyyy-MM-dd HH:mm",
-                CultureInfo.InvariantCulture),
-            NumberOfPeople = row.NumberOfPeople,
-            Status = row.Status
-        }).ToList();
+        return _connection.Query<ReservationModel>(sql).ToList();
     }
 
     public List<int> GetReservedTableIds(DateTime moment)
@@ -111,14 +107,39 @@ public class ReservationAccess
         _connection.Execute(sql, new { ReservationId = reservationId });
     }
 
-    private sealed class ReservationRow
+    public void Update(ReservationModel reservation)
     {
-        public int Id { get; set; }
-        public long UserID { get; set; }
-        public int SelectedTableId { get; set; }
-        public string Date { get; set; } = "";
-        public string Time { get; set; } = "";
-        public int NumberOfPeople { get; set; }
-        public string Status { get; set; } = "Pending";
+        string sql = $"""
+            UPDATE {Table}
+            SET TableID = @TableID,
+                Time = @Time,
+                Date = @Date,
+                People = @People
+            WHERE ID = @Id
+                AND NOT EXISTS (
+                    SELECT 1
+                    FROM {Table} AS Existing
+                    WHERE Existing.TableID = @TableID
+                        AND Existing.ID != @Id
+                        AND Existing.Date || ' ' || Existing.Time > @EarliestAllowedTime
+                        AND Existing.Date || ' ' || Existing.Time < @LatestAllowedTime
+                )
+            """;
+
+        int rowsUpdated = _connection.Execute(sql, new
+        {
+            reservation.Id,
+            TableID = reservation.SelectedTableId,
+            Time = reservation.ReservationTime.ToString("HH:mm"),
+            Date = reservation.ReservationDate.ToString("yyyy-MM-dd"),
+            People = reservation.NumberOfPeople,
+            EarliestAllowedTime = reservation.ReservationTime.AddHours(-2).ToString("yyyy-MM-dd HH:mm"),
+            LatestAllowedTime = reservation.ReservationTime.AddHours(2).ToString("yyyy-MM-dd HH:mm")
+        });
+
+        if (rowsUpdated == 0)
+        {
+            throw new InvalidOperationException("Reservation not found or the selected table is no longer available.");
+        }
     }
 }

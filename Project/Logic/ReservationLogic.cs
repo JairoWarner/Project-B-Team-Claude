@@ -136,4 +136,19 @@ public class ReservationLogic
         _access.ChangeToCanceled(reservationId);
     }
 
+    public void UpdateReservation(ReservationModel reservation)
+    {
+        if (!ValidateNumberOfPeople(reservation.NumberOfPeople))
+        {
+            throw new InvalidOperationException("Number of people must be between 1 and 8");
+        }
+
+        if (!ValidateNumberOfChildren(reservation.NumberOfChildren, reservation.NumberOfPeople))
+        {
+            throw new InvalidOperationException("Number of children must be at least 0 and lower than the total number of people");
+        }
+
+        _access.Update(reservation);
+    }
+
 }
