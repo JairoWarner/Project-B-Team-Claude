@@ -33,6 +33,7 @@ public class ReservationAccess
                 SELECT 1
                 FROM {Table}
                 WHERE TableID = @TableID
+                    AND LOWER(COALESCE(Status, '')) != 'canceled'
                     AND Date || ' ' || Time > @EarliestAllowedTime
                     AND Date || ' ' || Time < @LatestAllowedTime
             )
@@ -77,7 +78,8 @@ public class ReservationAccess
     {
         string sql = $@"SELECT TableID FROM {Table}
                        WHERE Date || ' ' || Time > @EarliestTime
-                       AND Date || ' ' || Time < @LatestTime";
+                       AND Date || ' ' || Time < @LatestTime
+                       AND LOWER(COALESCE(Status, '')) != 'canceled'";
         
         return _connection.Query<int>(sql, new
         {
@@ -91,6 +93,7 @@ public class ReservationAccess
         string sql = $@"SELECT TableID FROM {Table}
                        WHERE Date || ' ' || Time > @EarliestTime
                        AND Date || ' ' || Time < @LatestTime
+                       AND LOWER(COALESCE(Status, '')) != 'canceled'
                        AND UserID = @UserID";
 
         return _connection.Query<int>(sql, new
@@ -121,6 +124,7 @@ public class ReservationAccess
                     FROM {Table} AS Existing
                     WHERE Existing.TableID = @TableID
                         AND Existing.ID != @Id
+                        AND LOWER(COALESCE(Existing.Status, '')) != 'canceled'
                         AND Existing.Date || ' ' || Existing.Time > @EarliestAllowedTime
                         AND Existing.Date || ' ' || Existing.Time < @LatestAllowedTime
                 )
