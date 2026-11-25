@@ -2,11 +2,11 @@ using Project.Presentation;
 
 public class MenuManagement
 {
-    private readonly MenuManagementLogic _logic = new();
+    private readonly MenuManagementLogic logic = new();
 
     public void Start()
     {
-        if (!_logic.IsAdmin())
+        if (!logic.IsAdmin())
         {
             Style.Error("Access denied. Admin privileges required.");
             Console.ReadKey(true);
@@ -17,7 +17,7 @@ public class MenuManagement
         [
             "Add to menu",
             "Remove from menu",
-            "Add food to store",
+            "Add food to restaurant",
             "Go back"
         ];
 
@@ -50,7 +50,7 @@ public class MenuManagement
 
     private long? SelectMenu()
     {
-        List<MenuModel> menus = _logic.GetAllMenus();
+        List<MenuModel> menus = logic.GetAllMenus();
 
         while (true)
         {
@@ -102,7 +102,7 @@ public class MenuManagement
             Style.Title("ADD EXISTING FOOD TO MENU");
 
             List<FoodModel> foods =
-                _logic.GetFoodNotInMenu(menuId);
+                logic.GetFoodNotInMenu(menuId);
 
             if (foods.Count == 0)
             {
@@ -129,7 +129,7 @@ public class MenuManagement
             if (foodId == 0)
                 return;
 
-            bool success = _logic.AddFoodToMenu(menuId, foodId);
+            bool success = logic.AddFoodToMenu(menuId, foodId);
 
             if (success)
                 Style.Success("Item successfully added to menu!");
@@ -155,7 +155,7 @@ public class MenuManagement
             Style.Title("REMOVE FOOD FROM MENU");
 
             List<FoodModel> foods =
-                _logic.GetFoodByMenu(menuId);
+                logic.GetFoodByMenu(menuId);
 
             if (foods.Count == 0)
             {
@@ -200,7 +200,7 @@ public class MenuManagement
                 continue;
             }
 
-            bool success = _logic.RemoveFoodFromMenu(menuId, foodId);
+            bool success = logic.RemoveFoodFromMenu(menuId, foodId);
 
             if (success)
                 Style.Success("Item removed from menu.");
@@ -248,7 +248,7 @@ public class MenuManagement
         if (cancelled)
             return;
 
-        bool success = _logic.AddFoodToStore(
+        bool success = logic.AddFoodToStore(
             name,
             price,
             description,
@@ -270,7 +270,7 @@ public class MenuManagement
     {
         cancelled = false;
 
-        List<MenuModel> menus = _logic.GetAllMenus();
+        List<MenuModel> menus = logic.GetAllMenus();
 
         while (true)
         {
