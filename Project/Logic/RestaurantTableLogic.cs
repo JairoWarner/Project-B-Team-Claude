@@ -7,19 +7,19 @@ public class RestaurantTableLogic
         return _access.GetAllTables();
     }
 
-    public List<RestaurantTableModel> GetAvailableTables(DateTime moment, int numberOfPeople)
+    public List<RestaurantTableModel> GetAvailableTables(DateTime moment, int numberOfPeople, int? excludedReservationId = null)
     {
-        return _access.GetTablesAvailableAt(moment, numberOfPeople);
+        return _access.GetTablesAvailableAt(moment, numberOfPeople, excludedReservationId);
     }
 
-    public List<int> GetFreeBarSeats(DateTime moment)
+    public List<int> GetFreeBarSeats(DateTime moment, int? excludedReservationId = null)
     {
-        return _access.GetFreeBarSeats(moment);
+        return _access.GetFreeBarSeats(moment, excludedReservationId);
     }
 
-    public List<int> FindBarSeats(DateTime moment, int numberOfPeople)
+    public List<int> FindBarSeats(DateTime moment, int numberOfPeople, int? excludedReservationId = null)
     {
-        List<int> freeSeats = GetFreeBarSeats(moment);
+        List<int> freeSeats = GetFreeBarSeats(moment, excludedReservationId);
 
         foreach (var startSeat in freeSeats)
         {

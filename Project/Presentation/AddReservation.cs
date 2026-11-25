@@ -210,11 +210,17 @@ public class AddReservation
 
     public List<int>? AskTable(DateTime reservationDate)
     {
-        List<RestaurantTableModel> availableTables = _tableLogic.GetAvailableTables(reservationDate, NumberOfPeople);
-        List<int> freeBarSeats = _tableLogic.FindBarSeats(reservationDate, NumberOfPeople);
+        return AskTable(reservationDate, NumberOfPeople);
+    }
+
+    public List<int>? AskTable(DateTime reservationDate, int numberOfPeople, int? excludedReservationId = null)
+    {
+        List<RestaurantTableModel> availableTables =
+            _tableLogic.GetAvailableTables(reservationDate, numberOfPeople, excludedReservationId);
+        List<int> freeBarSeats = _tableLogic.FindBarSeats(reservationDate, numberOfPeople, excludedReservationId);
         if (availableTables.Count == 0 && freeBarSeats.Count == 0)
         {
-            Console.WriteLine($"There are no available tables or bar seats for {NumberOfPeople} people at the selected time.");
+            Console.WriteLine($"There are no available tables or bar seats for {numberOfPeople} people at the selected time.");
             Console.WriteLine("Press Enter to return to the main menu.");
             Console.ReadLine();
             return null;
@@ -231,9 +237,9 @@ public class AddReservation
             if (input?.ToUpper() == "B")
             {
                 Console.Clear();
-                List<int> barSeats = _tableLogic.FindBarSeats(reservationDate, NumberOfPeople);
+                List<int> barSeats = _tableLogic.FindBarSeats(reservationDate, numberOfPeople, excludedReservationId);
 
-                if (barSeats.Count != NumberOfPeople)
+                if (barSeats.Count != numberOfPeople)
                 {
                     Style.Error("Not enough seats available next to eachother");
                     Style.Normal("Press any key to continue...");

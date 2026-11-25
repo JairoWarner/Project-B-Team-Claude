@@ -12,7 +12,7 @@ public class RestaurantTableAccess
         return _connection.Query<RestaurantTableModel>(sql).ToList();
     }
 
-    public List<int> GetFreeBarSeats(DateTime moment)
+    public List<int> GetFreeBarSeats(DateTime moment, int? excludedReservationId = null)
     {
         string sql = $@"SELECT ID FROM {Table}
                     WHERE Type = 'Bar'
@@ -20,6 +20,7 @@ public class RestaurantTableAccess
                     AND NOT EXISTS (
                         SELECT 1 FROM Reservation
                         WHERE Reservation.TableID = {Table}.ID
+                        AND (@ExcludedReservationId IS NULL OR Reservation.ID != @ExcludedReservationId)
                         AND Reservation.Date || ' ' || Reservation.Time > @EarliestTime
                         AND Reservation.Date || ' ' || Reservation.Time < @LatestTime
                     )
@@ -27,6 +28,7 @@ public class RestaurantTableAccess
         
         return _connection.Query<int>(sql, new
         {
+            ExcludedReservationId = excludedReservationId,
             EarliestTime = moment.AddHours(-2).ToString("yyyy-MM-dd HH:mm"),
             LatestTime = moment.AddHours(2).ToString("yyyy-MM-dd HH:mm")
         }).ToList();
@@ -43,7 +45,7 @@ public class RestaurantTableAccess
     }
 
     // Retrieves active tables with enough seats and no reservation within two hours of the requested time.
-    public List<RestaurantTableModel> GetTablesAvailableAt(DateTime reservationTime, int numberOfPeople)
+    public List<RestaurantTableModel> GetTablesAvailableAt(DateTime reservationTime, int numberOfPeople, int? excludedReservationId = null)
     {
         string sql = $"""
             SELECT ID AS TableId, Seats, Available
@@ -55,6 +57,7 @@ public class RestaurantTableAccess
                     SELECT 1
                     FROM Reservation
                     WHERE Reservation.TableID = {Table}.ID
+                        AND (@ExcludedReservationId IS NULL OR Reservation.ID != @ExcludedReservationId)
                         AND Reservation.Date || ' ' || Reservation.Time > @EarliestAllowedTime
                         AND Reservation.Date || ' ' || Reservation.Time < @LatestAllowedTime
                 )
@@ -64,6 +67,7 @@ public class RestaurantTableAccess
         return _connection.Query<RestaurantTableModel>(sql, new
         {
             NumberOfPeople = numberOfPeople,
+            ExcludedReservationId = excludedReservationId,
             EarliestAllowedTime = reservationTime.AddHours(-2).ToString("yyyy-MM-dd HH:mm"),
             LatestAllowedTime = reservationTime.AddHours(2).ToString("yyyy-MM-dd HH:mm")
         }).ToList();
