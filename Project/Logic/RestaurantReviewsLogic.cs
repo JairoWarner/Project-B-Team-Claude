@@ -1,7 +1,13 @@
-﻿namespace Project.Logic;
+﻿using System.Security.Cryptography;
+using Project.DataAccess;
+using Project.DataModels;
+
+namespace Project.Logic;
 
 public class RestaurantReviewsLogic
 {
+    ReviewAccess _reviewAccess =  new ReviewAccess();
+    
     public double CalculateRating(int rating)
     {
         double rat = rating switch
@@ -20,5 +26,24 @@ public class RestaurantReviewsLogic
         };
         
         return rat;
+    }
+
+    public bool ValidateReviewText(string reviewText)
+    {
+        if (string.IsNullOrEmpty(reviewText))
+        {
+            return false;
+        }
+        
+        return true;
+    }
+
+    public void CreateReview(double rating, string reviewText)
+    {
+        AccountModel? currentAccount = AccountsLogic.CurrentAccount;
+        DateTime dateTimeNow = DateTime.Now;
+        
+        var review = new ReviewModel(0, currentAccount.Id, rating, reviewText, dateTimeNow);
+        _reviewAccess.AddReview(review);
     }
 }

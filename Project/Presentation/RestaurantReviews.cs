@@ -7,6 +7,9 @@ public static class RestaurantReviews
     private static string FullStar = "\u2605";
     private static string HalfStar = "\u2BE8";
     private static string EmptyStar = "\u2606";
+    public static double Rating { get; set; }
+    public static string ReviewText { get; set; }
+    public static RestaurantReviewsLogic _logic =  new RestaurantReviewsLogic();
 
     public static void ReviewStart()
     {
@@ -55,15 +58,62 @@ public static class RestaurantReviews
             var choice = ArrowNavigation.SidewaysArrowNavigation(ReviewPage);
             
             PrintRating(choice);
-            Console.ReadLine();
+            TextReview();
+
+            break;
         }
+        
+        _logic.CreateReview(Rating, ReviewText);
+        ReviewStart();
     }
 
     public static void PrintRating(int rating)
     {
         RestaurantReviewsLogic restaurantReviewsLogic = new RestaurantReviewsLogic();
         
-        double rat = restaurantReviewsLogic.CalculateRating(rating);
-        Style.Normal($"{rat}/5");
+        Rating = restaurantReviewsLogic.CalculateRating(rating);
+        Style.Normal($"{Rating}/5");
+    }
+
+    public static void TextReview()
+    {
+        string[] YN = ["Yes", "No"];
+
+        while (true)
+        {
+            int choice = ArrowNavigation.SidewaysArrowNavigation(YN, () =>
+            {
+                Style.Normal("Would you like to specify your review?");
+                Style.Normal($"{Style.LightGrey}──────────────────────────────────────\n");
+            });
+
+            switch (choice)
+            {
+                case 1:
+                    Style.Normal("Write your review:\n");
+                    WriteText();
+                    break;
+                case 2:
+                    Style.Normal("No text was added!");
+                    Thread.Sleep(2000);
+                    Style.WaitingAnimation();
+                    break;
+            }
+
+            break;
+        }
+    }
+    
+    public static void WriteText()
+    {
+        ReviewText = Console.ReadLine();
+
+        while (true)
+        {
+            if (!_logic.ValidateReviewText(ReviewText))
+                Style.Error("Invalid review text!");
+            else
+                break;
+        }
     }
 }

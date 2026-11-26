@@ -64,4 +64,24 @@ public static class Style
     {
         Console.WriteLine(ErrorAchtergrond + Wit + Bold + "       [!] E R R O R :        " + Reset);
     }
+
+    public static void WaitingAnimation()
+    {
+        DateTime endTime = DateTime.Now.AddSeconds(5);
+
+        while (DateTime.Now < endTime)
+        {
+            Thread.Sleep(500);
+            Console.Write(".");
+
+            Thread.Sleep(500);
+            Console.Write(".");
+
+            Thread.Sleep(500);
+            Console.Write(".");
+
+            Thread.Sleep(500);
+            Console.Write("\b\b\b   \b\b\b");
+        }
+    }
 }
