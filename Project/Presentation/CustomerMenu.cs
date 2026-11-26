@@ -12,7 +12,8 @@ public class CustomerMenu
             "3: Show Reservations",
             "4: Food menu",
             "5: About Us",
-            "6: Log out"
+            "6: Reviews",
+            "7: Log out"
         ];
         
         while (true)
@@ -53,6 +54,10 @@ public class CustomerMenu
                     break;
 
                 case 6:
+                    RestaurantReviews.ReviewStart();
+                    break;
+                
+                case 7:
                     Console.Clear();
                     Console.WriteLine("You have been logged out");
                     UserLogin.LoginStart();

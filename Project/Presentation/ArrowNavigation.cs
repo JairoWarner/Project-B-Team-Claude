@@ -101,7 +101,7 @@ public static class ArrowNavigation
 
             ConsoleKeyInfo InputKey = Console.ReadKey(true);
 
-            if (drop == false)
+            if (!drop)
             {
                 if (InputKey.Key == ConsoleKey.UpArrow)
                     choice--;
@@ -146,6 +146,40 @@ public static class ArrowNavigation
                 if (InputKey.Key == ConsoleKey.Escape)
                     drop = false;
             }
+        }
+    }
+
+    public static int SidewaysArrowNavigation(string[] menu, Action? header = null)
+    {
+        int choice = 0;
+
+        while (true)
+        {
+            Console.Clear();
+            header?.Invoke();
+            
+            for (int i = 0; i < menu.Length; i++)
+            {
+                if (choice < 0)
+                    choice = 0;
+
+                if (choice > menu.Length - 1)
+                    choice = menu.Length - 1;
+
+                if (choice == i)
+                {
+                    Style.Normal($"> {Style.Goud}{menu[i]}{Style.Reset}");
+                }
+            }
+
+            ConsoleKeyInfo InputKey = Console.ReadKey();
+
+            if (InputKey.Key == ConsoleKey.LeftArrow)
+                choice--;
+            if (InputKey.Key == ConsoleKey.RightArrow)
+                choice++;
+            if (InputKey.Key == ConsoleKey.Enter)
+                return choice + 1;
         }
     }
 }
