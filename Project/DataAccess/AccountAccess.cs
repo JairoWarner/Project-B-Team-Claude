@@ -42,6 +42,13 @@ public class AccountAccess
         
         return _connection.QueryFirstOrDefault<AccountModel>(sql, new { Email = email });
     }
+    
+    public string GetNameByID(Int64 id)
+    {
+        string sql = $"SELECT FullName FROM {Table} WHERE id = @ID";
+        
+        return _connection.QueryFirstOrDefault<string>(sql, new { ID = id });
+    }
 
     public void Update(AccountModel account)
     {

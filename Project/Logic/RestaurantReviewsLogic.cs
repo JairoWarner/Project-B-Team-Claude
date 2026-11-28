@@ -46,4 +46,26 @@ public class RestaurantReviewsLogic
         var review = new ReviewModel(0, currentAccount.Id, rating, reviewText, dateTimeNow);
         _reviewAccess.AddReview(review);
     }
+
+    public double CalculateAverageRating()
+    {
+        List<int> allRatings = new();
+        allRatings = _reviewAccess.GetAllRating();
+        
+        return Math.Round(allRatings.Average(), 1);
+    }
+
+    public List<ReviewModel> GetAllReviews()
+    {
+        List<ReviewModel> reviews = _reviewAccess.GetAllReviews();
+        return reviews;
+    }
+
+    public string GetNameById(Int64 id)
+    {
+        AccountAccess accountAccess = new AccountAccess();
+        string name = accountAccess.GetNameByID(id);
+
+        return name;
+    }
 }

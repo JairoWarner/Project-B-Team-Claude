@@ -1,4 +1,5 @@
-﻿using Project.Logic;
+﻿using Project.DataModels;
+using Project.Logic;
 
 namespace Project.Presentation;
 
@@ -9,11 +10,12 @@ public static class RestaurantReviews
     private static string EmptyStar = "\u2606";
     public static double Rating { get; set; }
     public static string ReviewText { get; set; }
-    public static RestaurantReviewsLogic _logic =  new RestaurantReviewsLogic();
+    public static RestaurantReviewsLogic _logic = new RestaurantReviewsLogic();
 
     public static void ReviewStart()
     {
         Console.Clear();
+        double rating = _logic.CalculateAverageRating();
 
         string[] ReviewPage =
         [
@@ -21,7 +23,12 @@ public static class RestaurantReviews
             "Go back"
         ];
 
-        int choice = ArrowNavigation.PrintMenu(ReviewPage);
+        int choice = ArrowNavigation.PrintMenu(ReviewPage, () =>
+        {
+            Console.WriteLine($"Restaurant rating: {rating}/5\n");
+            Style.Normal($"{Style.LightGrey}──────────────────────────────────────\n");
+            PrintAllReviews();
+        });
 
         switch (choice)
         {
@@ -56,13 +63,13 @@ public static class RestaurantReviews
         while (true)
         {
             var choice = ArrowNavigation.SidewaysArrowNavigation(ReviewPage);
-            
+
             PrintRating(choice);
             TextReview();
 
             break;
         }
-        
+
         _logic.CreateReview(Rating, ReviewText);
         ReviewStart();
     }
@@ -70,7 +77,7 @@ public static class RestaurantReviews
     public static void PrintRating(int rating)
     {
         RestaurantReviewsLogic restaurantReviewsLogic = new RestaurantReviewsLogic();
-        
+
         Rating = restaurantReviewsLogic.CalculateRating(rating);
         Style.Normal($"{Rating}/5");
     }
@@ -103,7 +110,7 @@ public static class RestaurantReviews
             break;
         }
     }
-    
+
     public static void WriteText()
     {
         ReviewText = Console.ReadLine();
@@ -114,6 +121,18 @@ public static class RestaurantReviews
                 Style.Error("Invalid review text!");
             else
                 break;
+        }
+    }
+
+    public static void PrintAllReviews()
+    {
+        List<ReviewModel> reviews = _logic.GetAllReviews();
+
+        foreach (ReviewModel review in reviews)
+        {
+            string name = _logic.GetNameById(review.AccountId);
+            Style.Normal($"{name} On: {review.CreatedAt}\n\nRating: {review.Rating}/5\n\n{review.ReviewText}\n");
+            Style.Normal($"{Style.LightGrey}──────────────────────────────────────\n");
         }
     }
 }
